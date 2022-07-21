@@ -1,0 +1,8 @@
+mixin video(video)
+    div 
+        a(href=`/video/${video.id}`) 
+            h4=video.title 
+        ul 
+            li=video.rating
+            li=video.year
+            li=video.overview
