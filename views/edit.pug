@@ -6,4 +6,6 @@ block body
 
     form(method="POST")
         input(name="title" type="text" placeholder="change title" value=video.title required)
+        input(name="description" type="text" placeholder="change description" value=video.description required)
+        input(name="hashtags" type="text" placeholder="change hashtags" value=video.hashtags.map(tag=>tag.slice(1)).join() required)
         input(value="Save" type="submit") 

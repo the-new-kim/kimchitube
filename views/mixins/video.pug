@@ -2,7 +2,26 @@ mixin video(video)
     div 
         a(href=`/video/${video.id}`) 
             h4=video.title 
-        ul 
-            li=video.rating
-            li=video.year
-            li=video.overview
+        p=video.description
+
+        ul
+            each tag in video.hashtags
+                li=tag
+       
+        ul
+            li  #{video.meta.views} views
+            li  #{video.meta.rating}/5
+
+    hr
+
+
+//-             const videoSchema = new mongoose.Schema({
+//-   title: String,
+//-   description: String,
+//-   createdAt: Date,
+//-   hashtags: [{ type: String }],
+//-   meta: {
+//-     views: Number,
+//-     rating: Number,
+//-   },
+//- });

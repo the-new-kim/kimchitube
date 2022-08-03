@@ -1,0 +1,17 @@
+extends base
+include mixins/video
+
+
+block body
+    h1=pageTitle
+
+    form(method="GET")
+        input(name="keyword" type="text" placeholder="search by keyword" required)
+        input(value="Save" type="submit") 
+    hr
+
+    div
+        each video in videos 
+            +video(video)
+        else 
+            p sorry nothing found

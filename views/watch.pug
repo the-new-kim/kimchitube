@@ -2,6 +2,12 @@ extends base
 
 block body
     h1=video.title
-    p=video.overview
+    p=video.description
+    hr
+ 
 
     a(href=`${video.id}/edit`) edit video
+    hr
+    a(href=`${video.id}/delete`) delete video
+    hr
+    
