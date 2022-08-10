@@ -1,0 +1,17 @@
+extends base
+
+
+block body
+    h1=pageTitle
+    if errorMessage 
+        span=errorMessage
+    form(method="POST")
+        input(name="username" type="text" placeholder="Username" required)
+        input(name="password" type="password" placeholder="Password" required)
+        input(value="Login" type="submit") 
+
+        hr
+
+        div 
+            span Don't have an account?
+            a(href="/join") Register now

@@ -5,9 +5,9 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")  
         if pageTitle 
-            title #{pageTitle} | youtube 
+            title #{pageTitle} | #{siteTitle} 
         else 
-            title youtube
+            title=siteTitle
 
     body 
         nav 
@@ -18,6 +18,20 @@ html(lang="en")
                     a(href="/search") search 
                 li
                     a(href="/video/upload") upload 
+
+                if loggedIn
+                    li 
+                        a(href="/logout") Logout
+                    li
+                        a(href="/my-profile") #{loggedInUser.name}'s Profile
+                else
+                    li
+                        a(href="/join") Join 
+                    li
+                        a(href="/login") Login 
+
+
+                
                 
         block body
 
