@@ -16,14 +16,15 @@ html(lang="en")
                     a(href="/") home 
                 li 
                     a(href="/search") search 
-                li
-                    a(href="/video/upload") upload 
+                
 
                 if loggedIn
-                    li 
-                        a(href="/logout") Logout
                     li
-                        a(href="/my-profile") #{loggedInUser.name}'s Profile
+                        a(href="/video/upload") upload 
+                    li 
+                        a(href="/user/logout") Logout
+                    li
+                        a(href="/user/edit") Edit Profile
                 else
                     li
                         a(href="/join") Join 

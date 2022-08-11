@@ -37,7 +37,7 @@ app.use(
 // });
 
 app.use(localsMiddleware);
-
+app.use("/uploads", express.static("uploads"));
 app.use("/", globalRouter);
 app.use("/video", videoRouter);
 app.use("/user", userRouter);
