@@ -1,0 +1,16 @@
+extends ../base
+
+block body
+    h1=video.title
+    video(src="/" + video.fileUrl, controls)
+    p=video.description
+    small uploaded by 
+        a(href=`/user/${video.owner._id}`)=video.owner.name
+    hr
+
+    if loggedInUser && video.owner._id + "" === loggedInUser._id + ""
+        a(href=`${video.id}/edit`) edit video
+        hr
+        a(href=`${video.id}/delete`) delete video
+        hr
+    

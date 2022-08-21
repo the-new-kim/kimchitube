@@ -1,6 +1,7 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
-// import fetch from "node-fetch";
+import fetch from "node-fetch";
+import Video from "../models/Video";
 
 export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "Join" });
@@ -70,7 +71,7 @@ export const logout = (req, res) => {
   return res.redirect("/");
 };
 export const getEdit = (req, res) => {
-  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+  return res.render("user/edit-profile", { pageTitle: "Edit Profile" });
 };
 
 export const postEdit = async (req, res) => {
@@ -100,8 +101,20 @@ export const postEdit = async (req, res) => {
 };
 
 export const remove = (req, res) => res.send("remove");
-export const see = (req, res) => {
-  return res.render("profile");
+export const see = async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id).populate("videos");
+  console.log(user);
+
+  if (!user) {
+    return res.render("user/profile", { pageTitle: "User not found." });
+  }
+
+  return res.render("user/profile", {
+    pageTitle: `${user.name}'s Profile.`,
+    user,
+  });
 };
 
 export const getChangePassword = (req, res) => {
@@ -147,8 +160,6 @@ export const startGithubLogin = (req, res) => {
 
   const params = new URLSearchParams(config).toString();
 
-  console.log(`${baseUrl}?${params}`);
-
   res.redirect(`${baseUrl}?${params}`);
 };
 
@@ -163,18 +174,68 @@ export const finishGithubLogin = async (req, res) => {
 
   const params = new URLSearchParams(config).toString();
 
-  console.log(params);
   // Fetch does not exist on Node JS. Only on Browser.
   // So we need to install a package called "node-fetch".
   // there are some functions not defined on Node JS like... fetch, alert...
-  const data = await fetch(`${baseUrl}?${params}`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-    },
-  });
+  const tokenRequest = await (
+    await fetch(`${baseUrl}?${params}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+  ).json();
 
-  const json = await data.json();
+  const { access_token } = tokenRequest;
 
-  console.log(json);
+  if ("access_token" in tokenRequest) {
+    const apiUrl = "https://api.github.com";
+
+    const userData = await (
+      await fetch(`${apiUrl}/user`, {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+
+    const emailData = await (
+      await fetch(`${apiUrl}/user/emails`, {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+
+    const emailObj = emailData.find(
+      (email) => email.primary === true && email.verified === true
+    );
+    if (!emailObj) {
+      return res.redirect("/login");
+    }
+
+    const existingUser = await User.findOne({ email: emailObj.email });
+
+    if (existingUser) {
+      req.session.loggedIn = true;
+      req.session.user = existingUser;
+      return res.redirect("/");
+    } else {
+      const user = await User.create({
+        username: userData.login,
+        email: emailObj.email,
+        name: userData.name,
+        password: "",
+        location: userData.location,
+        socialOnly: true,
+        avatarUrl: userData.avatar_url,
+      });
+
+      req.session.loggedIn = true;
+      req.session.user = user;
+      return res.redirect("/");
+    }
+  } else {
+    return res.redirect("/login");
+  }
 };

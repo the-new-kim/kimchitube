@@ -1,11 +1,14 @@
-extends base
+extends ../base
 
 
 block body
     h1=pageTitle
     if errorMessage 
         span=errorMessage
-    img(src="/" + loggedInUser.avatarUrl, width="100", height="100")
+        
+    if loggedInUser.avatar
+        img(src=`${loggedInUser.avatarUrl.includes("://") ? "" : "/"}` + loggedInUser.avatarUrl, width="100", height="100")
+
     form(method="POST" enctype="multipart/form-data")
         label(for="avatar") Avatar
         input(name="avatar" type="file" accept="image/*")
