@@ -7,8 +7,10 @@ import {
   postEdit,
   remove,
   see,
+  startGithubLogin,
+  finishGithubLogin,
 } from "../controllers/userController";
-import { protectorMiddleware, uploadFile } from "../middlewares";
+import { avatarUpload, protectorMiddleware } from "../middlewares";
 
 // /login -> Login
 // /search -> Search
@@ -25,7 +27,7 @@ userRouter
   .route("/edit")
   .all(protectorMiddleware)
   .get(getEdit)
-  .post(uploadFile.single("avatar"), postEdit);
+  .post(avatarUpload.single("avatar"), postEdit);
 userRouter
   .route("/change-password")
   .all(protectorMiddleware)
@@ -33,6 +35,11 @@ userRouter
   .post(postChangePassword);
 
 userRouter.get("/remove", protectorMiddleware, remove);
-userRouter.get("/:id(\\d+)", see);
+// REGEX Number
+// userRouter.get("/:id(\\d+)", see);
+userRouter.get("/:id([0-9a-f]{24})", see);
+
+userRouter.get("/github/start-login", startGithubLogin);
+userRouter.get("/github/finish-login", finishGithubLogin);
 
 export default userRouter;

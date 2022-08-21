@@ -1,5 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
+// import fetch from "node-fetch";
 
 export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "Join" });
@@ -99,7 +100,9 @@ export const postEdit = async (req, res) => {
 };
 
 export const remove = (req, res) => res.send("remove");
-export const see = (req, res) => res.send("see");
+export const see = (req, res) => {
+  return res.render("profile");
+};
 
 export const getChangePassword = (req, res) => {
   return res.render("change-password", { pageTitle: "Change Password" });
@@ -132,4 +135,46 @@ export const postChangePassword = async (req, res) => {
   await user.save();
 
   return res.redirect("/user/logout");
+};
+
+export const startGithubLogin = (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/authorize";
+
+  const config = {
+    client_id: process.env.GITHUB_CLIENT_ID,
+    scope: "read:user user:email",
+  };
+
+  const params = new URLSearchParams(config).toString();
+
+  console.log(`${baseUrl}?${params}`);
+
+  res.redirect(`${baseUrl}?${params}`);
+};
+
+export const finishGithubLogin = async (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/access_token";
+
+  const config = {
+    client_id: process.env.GITHUB_CLIENT_ID,
+    client_secret: process.env.GITHUB_SECRET,
+    code: req.query.code,
+  };
+
+  const params = new URLSearchParams(config).toString();
+
+  console.log(params);
+  // Fetch does not exist on Node JS. Only on Browser.
+  // So we need to install a package called "node-fetch".
+  // there are some functions not defined on Node JS like... fetch, alert...
+  const data = await fetch(`${baseUrl}?${params}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  const json = await data.json();
+
+  console.log(json);
 };
