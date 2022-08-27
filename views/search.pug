@@ -10,8 +10,8 @@ block body
         input(value="Save" type="submit") 
     hr
 
-    div
+    div.video-grid
         each video in videos 
             +video(video)
         else 
-            p sorry nothing found
+            span.empty__message No videos found

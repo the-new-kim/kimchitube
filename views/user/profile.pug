@@ -4,15 +4,14 @@ include ../mixins/video
 block body
     h1=pageTitle
 
-    each video in user.videos
-        +video(video)
-    else 
-        p No Videos Yet.
-
-    //- each video in videos 
-    //-     +video(video)
-    //- else 
-    //-     p sorry nothing found
+    div.profile__data
+        img(src=`${loggedInUser.avatarUrl.includes("://") ? "" : "/"}` + loggedInUser.avatarUrl).avatar
+        h3=user.name
+    div.video-grid
+        each video in user.videos
+            +video(video)
+        else
+            span.empty__message No videos found
 
 
 

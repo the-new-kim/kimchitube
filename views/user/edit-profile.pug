@@ -12,13 +12,13 @@ block body
     form(method="POST" enctype="multipart/form-data")
         label(for="avatar") Avatar
         input(name="avatar" type="file" accept="image/*")
-        hr
+
         input(name="username" type="text" placeholder="Username" required value=loggedInUser.username)
         input(name="email" type="email" placeholder="Email" required value=loggedInUser.email)
         input(name="name" type="text" placeholder="Name" required value=loggedInUser.name)
         input(name="location" type="text" placeholder="Location" required value=loggedInUser.location)
         input(value="Save" type="submit")
 
-        hr
 
-        a(href="change-password") Change Password 
+        div.edit-profile__password
+            a(href="change-password") Change Password 

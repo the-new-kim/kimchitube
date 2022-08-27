@@ -40,13 +40,11 @@ export const getLogin = (req, res) => {
   return res.render("login", { pageTitle: "Login" });
 };
 export const postLogin = async (req, res) => {
-  const pageTitle = "Login";
   const { username, password } = req.body;
   const user = await User.findOne({ username });
 
   if (!user) {
     return res.status(400).render("login", {
-      pageTitle,
       errorMessage: "An Accoint with this Username does not exist.",
     });
   }
@@ -55,7 +53,6 @@ export const postLogin = async (req, res) => {
 
   if (!passwordMatched) {
     return res.status(400).render("login", {
-      pageTitle,
       errorMessage: "Wrong Password.",
     });
   }

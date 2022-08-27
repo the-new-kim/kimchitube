@@ -1,0 +1,24 @@
+header
+    a(href="/")=siteTitle
+
+    nav 
+        ul
+            li 
+                a(href="/search") search 
+            if loggedIn
+                li
+                    a(href="/video/upload") upload 
+                li 
+                    a(href="/user/logout") Logout
+                li
+                    a(href="/user/edit") Edit Profile
+                li
+                    a(href=`/user/${loggedInUser._id}`)
+                        if loggedInUser.avatarUrl === ""
+                            span 😀
+                        else
+                            img.header__avatar(src=`${loggedInUser.avatarUrl.includes("://") ? "" : "/"}` + loggedInUser.avatarUrl)
+            else
+                li
+                    a(href="/login") Login 
+            

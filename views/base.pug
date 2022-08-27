@@ -8,36 +8,13 @@ html(lang="en")
             title #{pageTitle} | #{siteTitle} 
         else 
             title=siteTitle
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
         link(rel="stylesheet", href="/static/css/styles.css")
 
     body 
-        nav 
-            ul 
-                li 
-                    a(href="/") home 
-                li 
-                    a(href="/search") search 
-                
-
-                if loggedIn
-                    li
-                        a(href="/video/upload") upload 
-                    li 
-                        a(href="/user/logout") Logout
-                    li
-                        a(href="/user/edit") Edit Profile
-                    li 
-                        a(href=`/user/${loggedInUser._id}`) #{loggedInUser.name}'s Profile
-                else
-                    li
-                        a(href="/join") Join 
-                    li
-                        a(href="/login") Login 
-
-
-                
-                
-        block body
-
+        include partials/header     
+        main   
+            block body
         include partials/footer
-        script(src="/static/js/main.js") 
+        block scripts
+        //- script(src="/static/js/main.js") 

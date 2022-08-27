@@ -2,7 +2,6 @@ extends base
 
 
 block body
-    h1=pageTitle
     if errorMessage 
         span=errorMessage
     form(method="POST")
@@ -13,9 +12,6 @@ block body
         input(name="name" type="text" placeholder="Name" required)
         input(name="location" type="text" placeholder="Location" required)
         input(value="Save" type="submit") 
-
-        hr
-
-        div 
-            span Already have an account?
-            a(href="/login") Login now
+    div.auth-switch
+        span Already have an account? 
+        a(href="/login") Log in now &rarr;
