@@ -158,3 +158,38 @@ export const deleteVideo = async (req, res) => {
 
   return res.redirect(`/`);
 };
+
+export const registerView = async (req, res) => {
+  const { id } = req.params;
+  const video = await Video.findById(id);
+
+  const { user } = req.session;
+
+  // count only logged in user
+  if (!user) {
+    return res.sendStatus(200);
+  }
+  // prevent counting owners view
+  if (user._id + "" === video.owner + "") {
+    return res.sendStatus(200);
+  }
+
+  const loggedInUser = await User.findById(user._id);
+
+  // user already watched the video before
+  if (loggedInUser.watchedVideos.includes(id)) {
+    return res.sendStatus(200);
+  }
+
+  if (!video) {
+    return res.sendStatus(404);
+  }
+
+  loggedInUser.watchedVideos.push(id);
+  loggedInUser.save();
+
+  video.meta.views += 1;
+  video.save();
+
+  return res.sendStatus(200);
+};

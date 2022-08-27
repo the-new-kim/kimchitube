@@ -5,7 +5,8 @@ block body
     h1=pageTitle
 
     div.profile__data
-        img(src=`${loggedInUser.avatarUrl.includes("://") ? "" : "/"}` + loggedInUser.avatarUrl).avatar
+        if loggedInUser.avatarUrl
+            img(src=`${loggedInUser.avatarUrl.includes("://") ? "" : "/"}` + loggedInUser.avatarUrl).avatar
         h3=user.name
     div.video-grid
         each video in user.videos

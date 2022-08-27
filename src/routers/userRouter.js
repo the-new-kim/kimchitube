@@ -12,14 +12,6 @@ import {
 } from "../controllers/userController";
 import { avatarUpload, protectorMiddleware } from "../middlewares";
 
-// /login -> Login
-// /search -> Search
-
-// /users/:id -> See User
-// /users/logout -> Log Out
-// /users/edit -> Edit MY Profile
-// /users/delete -> Delete MY Profile
-
 const userRouter = express.Router();
 
 userRouter.get("/logout", protectorMiddleware, logout);

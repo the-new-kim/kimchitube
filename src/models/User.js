@@ -16,6 +16,12 @@ const userSchema = new mongoose.Schema({
       ref: "Video",
     },
   ],
+  watchedVideos: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Video",
+    },
+  ],
 });
 
 userSchema.pre("save", async function () {

@@ -118,14 +118,20 @@ const handleKeydown = (event) => {
   }
 };
 
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/video/${id}/view`, { method: "POST" });
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 video.addEventListener("click", handlePlayClick);
 
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolume);
 //the event function of loadedmetadata can load the infos of video... here like duration
-video.addEventListener("loadeddata", handleLoadedMetadata);
+video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("ended", handleEnded);
 
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
