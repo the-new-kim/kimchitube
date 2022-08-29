@@ -1,16 +1,29 @@
-import { createFFmpeg, fetchFile, FS } from "@ffmpeg/ffmpeg";
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 
 const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
+const timeStamp = document.getElementById("timeStamp");
 
 let stream;
 let recorder;
 let videoUrl; // URL
+let timeStampId;
+let currentTime = 0;
 
 // In my case async & await work without installing regenerator-runtime
 const init = async () => {
+  currentTime = 0;
+  timeStamp.innerText = `Total: ${currentTime} sec.`;
+
+  if (!actionBtn.disabled) {
+    actionBtn.disabled === true;
+  }
+
   stream = await navigator.mediaDevices.getUserMedia({
-    video: true,
+    video: {
+      width: 1024,
+      height: 576,
+    },
     audio: false,
   });
 
@@ -25,6 +38,7 @@ const init = async () => {
 
   video.srcObject = stream;
   video.play();
+  actionBtn.disabled = false;
 };
 
 const files = {
@@ -104,14 +118,20 @@ const handleDownload = async () => {
 
 // The reason why the event listeners have to be removed is because here we have only one button!
 const handleStop = () => {
+  if (recorder.state === "inactive") return;
   actionBtn.innerText = "Download Recording";
   actionBtn.removeEventListener("click", handleStop);
   actionBtn.addEventListener("click", handleDownload);
 
   recorder.stop();
+  clearInterval(timeStampId);
+  timeStampId = null;
+  console.log(timeStampId);
 };
 
 const handleStart = () => {
+  actionBtn.disabled = true;
+
   actionBtn.innerText = "Stop Recording";
   actionBtn.removeEventListener("click", handleStart);
   actionBtn.addEventListener("click", handleStop);
@@ -136,6 +156,21 @@ const handleStart = () => {
   };
 
   recorder.start();
+
+  if (!timeStampId) {
+    timeStampId = setInterval(() => {
+      currentTime += 1;
+      timeStamp.innerText = `Total: ${currentTime} sec.`;
+    }, 1000);
+  }
+
+  setTimeout(() => {
+    actionBtn.disabled = false;
+  }, 2000);
+
+  setTimeout(() => {
+    handleStop();
+  }, 10000);
 };
 
 init();

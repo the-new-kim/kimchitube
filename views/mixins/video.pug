@@ -1,21 +1,7 @@
 mixin video(video)
-    //- div 
-    //-     a(href=`/video/${video.id}`) 
-    //-         h4=video.title 
-    //-     p=video.description
-
-    //-     ul
-    //-         each tag in video.hashtags
-    //-             li=tag
-       
-    //-     ul
-    //-         li  #{video.meta.views} views
-    //-         li  #{video.meta.rating}/5
-
-    //- hr
 
     a(href=`/video/${video.id}`).video-mixin
-        div.video-mixin__thumb
+        div.video-mixin__thumb(style=video.thumbnailUrl && `background:url(${video.thumbnailUrl}); background-size:cover; background-position:center; background-repeat:no-repeat` )
         div.video-mixin__data
             span.video-mixin__title=video.title
             div.video-mixin__meta

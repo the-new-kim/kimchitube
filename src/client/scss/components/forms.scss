@@ -22,18 +22,20 @@ input:not(input[type="range"]) {
   &::placeholder {
     color: rgba(255, 255, 255, 0.7);
   }
-  &[type="submit"] {
-    text-align: center;
-    cursor: pointer;
-  }
 }
 
+input[type="submit"],
 .social__btn {
   border-radius: 5px;
   padding: 12px 20px;
   background-color: white;
   color: rgba($color: $red, $alpha: 1);
-  text-align: center;
-  cursor: pointer;
+  text-align: center !important;
+  cursor: pointer !important;
   display: block;
+  &:disabled {
+    background-color: gray;
+    color: darkslategray;
+    cursor: not-allowed !important;
+  }
 }
