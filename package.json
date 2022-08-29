@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ffmpeg/core": "^0.11.0",
+    "@ffmpeg/ffmpeg": "^0.11.3",
     "babel-loader": "^8.2.5",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",

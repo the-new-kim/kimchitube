@@ -38,8 +38,16 @@ app.use(
 // });
 
 app.use(localsMiddleware);
+
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
+
+// 👇 to solve sharedArrayBuffer error wich comes from loading ffmpeg👇
+app.use((_, res, next) => {
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
 
 app.use("/", globalRouter);
 app.use("/video", videoRouter);

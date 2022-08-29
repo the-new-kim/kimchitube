@@ -1,54 +1,11 @@
-const startBtn = document.getElementById("startBtn");
+import { createFFmpeg, fetchFile, FS } from "@ffmpeg/ffmpeg";
+
+const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
 
 let stream;
 let recorder;
-let videoFile;
-
-const handleDownload = () => {
-  const anchor = document.createElement("a");
-  anchor.href = videoFile;
-  anchor.download = "download.webm";
-  document.body.appendChild(anchor);
-
-  anchor.click();
-};
-
-// The reason why the event listeners have to be removed is because here we have only one button!
-const handleStop = () => {
-  startBtn.innerText = "Download Recording";
-  startBtn.removeEventListener("click", handleStop);
-  startBtn.addEventListener("click", handleDownload);
-
-  recorder.stop();
-};
-
-const handleStart = () => {
-  startBtn.innerText = "Stop Recording";
-  startBtn.removeEventListener("click", handleStart);
-  startBtn.addEventListener("click", handleStop);
-
-  recorder = new MediaRecorder(stream);
-  // Option example for MediaRecorder
-  // extension webm is compatible for every browser but the ohter extensions like mp4 may not.
-  //   const options = {
-  //     audioBitsPerSecond: 128000,
-  //     videoBitsPerSecond: 2500000,
-  //     mimeType: 'video/mp4'
-  //   }
-  //   const mediaRecorder = new MediaRecorder(stream, options);
-
-  recorder.ondataavailable = (event) => {
-    videoFile = URL.createObjectURL(event.data); //This line will create a ⭐️URL⭐️ wich exists only on browser
-
-    video.srcObject = null; // remove preview src
-    video.src = videoFile; // add the ⭐️URL⭐️ of recorded video file to src
-    video.loop = true;
-    video.play();
-  };
-
-  recorder.start();
-};
+let videoUrl; // URL
 
 // In my case async & await work without installing regenerator-runtime
 const init = async () => {
@@ -57,6 +14,7 @@ const init = async () => {
     audio: false,
   });
 
+  // 📝 Example for more options 📝
   //   getUserMedia({
   //     audio: true,
   //     video: {
@@ -69,6 +27,117 @@ const init = async () => {
   video.play();
 };
 
+const files = {
+  input: "recording.webm",
+  mp4Output: "output.mp4",
+  thumbnailOutput: "thumbnail.jpg",
+};
+
+const downloadFile = (url, fileName) => {
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fileName;
+  document.body.appendChild(anchor);
+
+  anchor.click();
+};
+
+const handleDownload = async () => {
+  actionBtn.removeEventListener("click", handleDownload);
+  actionBtn.innerText = "Transcoding";
+  actionBtn.disabled = true;
+
+  // 📝 FFMpeg + WebAssembly
+  // 1️⃣ create a virtual world of ffmpeg and load ffmpeg using await
+  const ffmpeg = createFFmpeg({ log: true });
+  await ffmpeg.load();
+
+  // 2️⃣ File System (FS)
+  ffmpeg.FS("writeFile", files.input, await fetchFile(videoUrl)); //FS(method, fileName, binaryData)
+
+  // 3️⃣ Run transcoding
+  await ffmpeg.run("-i", files.input, "-r", "60", files.mp4Output);
+  // basic ===> ffmpeg.run("-i" , input.webm, output.mp4)
+  await ffmpeg.run(
+    "-i",
+    files.input,
+    "-ss",
+    "00:00:01",
+    "-frames:v",
+    "1",
+    files.thumbnailOutput
+  );
+
+  // 4️⃣ Read
+  const mp4File = ffmpeg.FS("readFile", files.mp4Output);
+  const thumbnailFile = ffmpeg.FS("readFile", files.thumbnailOutput);
+
+  //   console.log(mp4File);// 👈 Uint8Array
+  //   console.log(mp4File.buffer); // 👈 binary data
+
+  // 5️⃣ Create a new Blob
+  const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+  const thumbnailBlob = new Blob([thumbnailFile.buffer], { type: "image/jpg" });
+
+  // 6️⃣ Create a new URL
+  const mp4Url = URL.createObjectURL(mp4Blob);
+  const thumbnailUrl = URL.createObjectURL(thumbnailBlob);
+
+  downloadFile(mp4Url, "video.mp4");
+  downloadFile(thumbnailUrl, "image.jpg");
+
+  // Unlink remove all files
+  ffmpeg.FS("unlink", files.input);
+  ffmpeg.FS("unlink", files.mp4Output);
+  ffmpeg.FS("unlink", files.thumbnailOutput);
+
+  // Remove Urls
+  URL.revokeObjectURL(mp4Url);
+  URL.revokeObjectURL(thumbnailUrl);
+  URL.revokeObjectURL(videoUrl);
+
+  actionBtn.disabled = false;
+  actionBtn.innerText = "Record Again";
+  actionBtn.addEventListener("click", handleStart);
+  init();
+};
+
+// The reason why the event listeners have to be removed is because here we have only one button!
+const handleStop = () => {
+  actionBtn.innerText = "Download Recording";
+  actionBtn.removeEventListener("click", handleStop);
+  actionBtn.addEventListener("click", handleDownload);
+
+  recorder.stop();
+};
+
+const handleStart = () => {
+  actionBtn.innerText = "Stop Recording";
+  actionBtn.removeEventListener("click", handleStart);
+  actionBtn.addEventListener("click", handleStop);
+
+  recorder = new MediaRecorder(stream);
+  // 📝 Option example for MediaRecorder 📝
+  // extension "webm" is compatible for every browser but the ohter extensions like "mp4" may not.
+  //   const options = {
+  //     audioBitsPerSecond: 128000,
+  //     videoBitsPerSecond: 2500000,
+  //     mimeType: 'video/mp4'
+  //   }
+  //   const mediaRecorder = new MediaRecorder(stream, options);
+
+  recorder.ondataavailable = (event) => {
+    videoUrl = URL.createObjectURL(event.data); //This line will create a ⭐️URL⭐️ wich exists only on browser
+
+    video.srcObject = null; // remove preview src
+    video.src = videoUrl; // add the ⭐️URL⭐️ of recorded video file to src
+    video.loop = true;
+    video.play();
+  };
+
+  recorder.start();
+};
+
 init();
 
-startBtn.addEventListener("click", handleStart);
+actionBtn.addEventListener("click", handleStart);
