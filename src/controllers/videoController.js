@@ -200,3 +200,9 @@ export const registerView = async (req, res) => {
 
   return res.sendStatus(200);
 };
+
+export const createComment = (req, res) => {
+  console.log(req.body.text);
+  console.log(req.params);
+  res.end();
+};

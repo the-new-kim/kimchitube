@@ -19,7 +19,15 @@ const userSchema = new mongoose.Schema({
   watchedVideos: [
     {
       type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: "Video",
+    },
+  ],
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Comment",
     },
   ],
 });

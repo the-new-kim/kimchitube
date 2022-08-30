@@ -10,7 +10,7 @@
 @import "./components/forms";
 @import "./components/social-login";
 @import "./components/video-player";
-@import "./components/message.scss";
+@import "./components/message";
 
 // Screens
 
@@ -18,6 +18,7 @@
 @import "./screens/profile";
 @import "./screens/edit-profile";
 @import "./screens/upload";
+@import "./screens/watch";
 
 // Defaults
 * {

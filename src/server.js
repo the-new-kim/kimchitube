@@ -1,4 +1,4 @@
-import express from "express";
+import express, { text } from "express";
 import morgan from "morgan";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -15,6 +15,8 @@ const logger = morgan("dev");
 app.set("view engine", "pug");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+// app.use(express.text());// ⭐️ a built-in middleware function parses incoming request payloads into a string
+app.use(express.json()); // ⭐️ built-in middleware function parses incoming requests with JSON payloads
 
 //Session must be before Routers
 app.use(

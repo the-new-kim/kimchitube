@@ -104,6 +104,10 @@ const handleMouseLeave = () => {
 };
 
 const handleKeydown = (event) => {
+  const { localName } = event.target;
+  const isTextArea = localName === "textarea" || localName === "input";
+  if (isTextArea) return;
+
   const { code } = event;
 
   if (code === "Space") {

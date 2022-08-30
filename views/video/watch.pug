@@ -21,16 +21,32 @@ block body
                 span#fullScreen
                     i.fas.fa-expand
 
-    p=video.description
-    small uploaded by 
-        a(href=`/user/${video.owner._id}`)=video.owner.name
-    hr
+    //- p=video.description
+    //- small uploaded by 
+    //-     a(href=`/user/${video.owner._id}`)=video.owner.name
+    //- hr
 
-    if loggedInUser && video.owner._id + "" === loggedInUser._id + ""
-        a(href=`${video.id}/edit`) edit video
-        hr
-        a(href=`${video.id}/delete`) delete video
-        hr
+    div.video__data
+        p.video__title=video.title
+        small.video__owner Uploaded by 
+            a(href=`/users/${video.owner._id}`)=video.owner.name
+        small.video__createdAt=new Date(video.createdAt).toLocaleDateString("us-en", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+        br
+
+    if loggedIn
+        div.video__comments
+            form.video__comment-form#commentForm
+                textarea(cols="30", rows="10", placeholder="Write a nice commment...")
+                button Add Comment
+
+
+        if loggedInUser && video.owner._id + "" === loggedInUser._id + ""
+            a(href=`${video.id}/edit`) edit video
+            
+            a(href=`${video.id}/delete`) delete video
+        
         
 block scripts
-    script(src="/static/js/videoPlayer.js") 
+    script(src="/static/js/videoPlayer.js")
+    if loggedInUser 
+        script(src="/static/js/commentSection.js") 
