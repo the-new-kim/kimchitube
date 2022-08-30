@@ -2,8 +2,6 @@ extends base
 include mixins/video
 
 block body
-    h1=message
-
     div.video-grid
         each video in videos
             +video(video)

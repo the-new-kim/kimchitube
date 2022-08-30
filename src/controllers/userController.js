@@ -27,13 +27,18 @@ export const postJoin = async (req, res) => {
     });
   }
 
-  await User.create({
+  const user = await User.create({
     username,
     email,
     password,
     name,
     location,
   });
+
+  req.session.loggedIn = true;
+  req.session.user = user;
+
+  req.flash("success", "Account successfully created 🙌");
   return res.redirect("/");
 };
 export const getLogin = (req, res) => {
@@ -60,6 +65,7 @@ export const postLogin = async (req, res) => {
   req.session.loggedIn = true;
   req.session.user = user;
 
+  req.flash("success", `Hello ${username} 👋`);
   return res.redirect("/");
 };
 
@@ -93,7 +99,7 @@ export const postEdit = async (req, res) => {
   );
 
   req.session.user = updatedUser;
-
+  req.flash("success", "User updated 😎");
   return res.redirect("/user/edit");
 };
 
@@ -143,6 +149,7 @@ export const postChangePassword = async (req, res) => {
 
   user.password = newPassword;
   await user.save();
+  console.log("hihihihihihihihi");
 
   return res.redirect("/user/logout");
 };
