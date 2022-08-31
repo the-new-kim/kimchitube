@@ -1,7 +1,6 @@
 extends ../base
 
 block body
-    h1=video.title
     div#videoContainer(data-id=video._id)
         video(src="/" + video.fileUrl)
 
@@ -29,24 +28,28 @@ block body
     div.video__data
         p.video__title=video.title
         small.video__owner Uploaded by 
-            a(href=`/users/${video.owner._id}`)=video.owner.name
+            a(href=`/user/${video.owner._id}`)=video.owner.name
         small.video__createdAt=new Date(video.createdAt).toLocaleDateString("us-en", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
         br
 
     if loggedIn
-        div.video__comments
-            form.video__comment-form#commentForm
+        div.video__add-comments
+            form.video__comment-form#commentForm(data-logged-in-user=loggedInUser.name)
                 textarea(cols="30", rows="10", placeholder="Write a nice commment...")
                 button Add Comment
+    div.video__comments
+        ul
+            each comment in video.comments.reverse()
+                li.video__comment(data-comment-id=comment._id)
+                    span #{comment.owner.name} : #{comment.text}
+                    if loggedIn && loggedInUser._id + "" === comment.owner._id + ""
+                        button.deleteButton ❌
 
-
-        if loggedInUser && video.owner._id + "" === loggedInUser._id + ""
+        if loggedIn && video.owner._id + "" === loggedInUser._id + ""
             a(href=`${video.id}/edit`) edit video
-            
             a(href=`${video.id}/delete`) delete video
-        
-        
+            
 block scripts
     script(src="/static/js/videoPlayer.js")
-    if loggedInUser 
+    if loggedIn
         script(src="/static/js/commentSection.js") 

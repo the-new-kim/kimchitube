@@ -1,5 +1,6 @@
 import User from "../models/User";
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -44,7 +45,9 @@ export const search = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
 
-  const video = await Video.findById(id).populate("owner");
+  const video = await Video.findById(id)
+    .populate("owner")
+    .populate({ path: "comments", populate: { path: "owner" } });
 
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
@@ -133,7 +136,6 @@ export const postUpload = async (req, res) => {
 
     return res.redirect("/");
   } catch (error) {
-    console.log(error);
     return res
       .status(400)
       .render("video/upload", { errorMessage: error._message });
@@ -170,21 +172,23 @@ export const registerView = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
 
-  const { user } = req.session;
+  const {
+    user: { _id: userId },
+  } = req.session;
+
+  const user = await User.findById(userId);
 
   // count only logged in user
   if (!user) {
     return res.sendStatus(200);
   }
   // prevent counting owners view
-  if (user._id + "" === video.owner + "") {
+  if (userId + "" === video.owner + "") {
     return res.sendStatus(200);
   }
 
-  const loggedInUser = await User.findById(user._id);
-
   // user already watched the video before
-  if (loggedInUser.watchedVideos.includes(id)) {
+  if (user.watchedVideos.includes(id)) {
     return res.sendStatus(200);
   }
 
@@ -192,8 +196,8 @@ export const registerView = async (req, res) => {
     return res.sendStatus(404);
   }
 
-  loggedInUser.watchedVideos.push(id);
-  loggedInUser.save();
+  user.watchedVideos.push(id);
+  user.save();
 
   video.meta.views += 1;
   video.save();
@@ -201,8 +205,64 @@ export const registerView = async (req, res) => {
   return res.sendStatus(200);
 };
 
-export const createComment = (req, res) => {
-  console.log(req.body.text);
-  console.log(req.params);
-  res.end();
+export const createComment = async (req, res) => {
+  const {
+    session: {
+      user: { _id: userId },
+    },
+    body: { text },
+    params: { id: videoId },
+  } = req;
+
+  const video = await Video.findById(videoId).populate("comments");
+  const user = await User.findById(userId);
+  if (!video || !user) {
+    return res.sendStatus(404);
+  }
+
+  const comment = await Comment.create({
+    text,
+    owner: userId,
+    video: videoId,
+  });
+
+  video.comments.push(comment._id);
+  video.save();
+  user.comments.push(comment._id);
+  user.save();
+
+  return res.status(201).json({ commentId: comment._id, name: user.name }); // 201: created
+};
+
+export const deleteComment = async (req, res) => {
+  const {
+    session: {
+      user: { _id: userId },
+    },
+    body: { videoId },
+    params: { id: commentId },
+  } = req;
+
+  const user = await User.findById(userId);
+  const video = await Video.findById(videoId);
+
+  if (!user || !video || !commentId) {
+    return res.sendStatus(404);
+  }
+
+  await Comment.findByIdAndDelete(commentId);
+
+  const updateComments = (array) => {
+    return array.filter((comment) => comment._id + "" !== commentId + "");
+  };
+
+  const updatedUserComments = updateComments(user.comments);
+  user.comments = updatedUserComments;
+  user.save();
+
+  const updatedVideoComments = updateComments(video.comments);
+  video.comments = updatedVideoComments;
+  video.save();
+
+  return res.sendStatus(201);
 };

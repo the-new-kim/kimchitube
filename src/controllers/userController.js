@@ -70,7 +70,9 @@ export const postLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  req.session.destroy();
+  req.session.user = null;
+  req.session.loggedIn = false;
+  req.flash("success", "Successfully logged out 👋");
   return res.redirect("/");
 };
 export const getEdit = (req, res) => {
