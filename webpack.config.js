@@ -9,14 +9,14 @@ module.exports = {
       filename: "css/styles.css",
     }),
   ],
-  mode: "development", // "production" | "development" | "none",
+  // mode: "development", // "production" | "development" | "none",
   entry: {
     main: JS_BASE + "main.js",
     videoPlayer: JS_BASE + "videoPlayer.js",
     recorder: JS_BASE + "recorder.js",
     commentSection: JS_BASE + "commentSection.js",
   },
-  watch: true,
+  // watch: true,
   output: {
     filename: "js/[name].js",
     path: path.resolve(__dirname, "assets"),

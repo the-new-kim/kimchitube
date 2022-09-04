@@ -13,7 +13,7 @@ let currentTime = 0;
 // In my case async & await work without installing regenerator-runtime
 const init = async () => {
   currentTime = 0;
-  timeStamp.innerText = `Total: ${currentTime} sec.`;
+  timeStamp.innerText = currentTime;
 
   if (!actionBtn.disabled) {
     actionBtn.disabled === true;
@@ -160,7 +160,7 @@ const handleStart = () => {
   if (!timeStampId) {
     timeStampId = setInterval(() => {
       currentTime += 1;
-      timeStamp.innerText = `Total: ${currentTime} sec.`;
+      timeStamp.innerText = currentTime;
     }, 1000);
   }
 
