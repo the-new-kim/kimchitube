@@ -2,7 +2,7 @@ extends ../base
 
 block body
     div#videoContainer(data-id=video._id)
-        video(src="/" + video.fileUrl)
+        video(src=video.fileUrl, crossorigin)
 
         div#videoControls.videoControls
             div.videoControls__play

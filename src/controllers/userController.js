@@ -90,7 +90,7 @@ export const postEdit = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? file.location : avatarUrl,
       name,
       email,
       username,
@@ -109,7 +109,6 @@ export const see = async (req, res) => {
   const { id } = req.params;
 
   const user = await User.findById(id).populate("videos");
-  console.log(user);
 
   if (!user) {
     return res.render("user/profile", { pageTitle: "User not found." });
@@ -150,7 +149,6 @@ export const postChangePassword = async (req, res) => {
 
   user.password = newPassword;
   await user.save();
-  console.log("hihihihihihihihi");
 
   return res.redirect("/user/logout");
 };
