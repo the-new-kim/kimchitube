@@ -2,7 +2,7 @@ mixin video(video)
 
     a(href=`/video/${video.id}`).video-mixin
         div.video-mixin__thumb
-            img(src=video.thumbnailUrl, alt=video.title, crossorigin)
+            img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
         div.video-mixin__data
             span.video-mixin__title=video.title
             div.video-mixin__meta
@@ -12,3 +12,5 @@ mixin video(video)
                         span views 
                     else 
                         span view
+
+

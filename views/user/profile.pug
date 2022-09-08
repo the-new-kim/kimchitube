@@ -6,7 +6,7 @@ block body
 
     div.profile__data
         if loggedInUser.avatarUrl
-            img.header__avatar(src=loggedInUser.avatarUrl, crossorigin).avatar
+            img.header__avatar(src=isHeroku || loggedInUser.socialOnly ? loggedInUser.avatarUrl : "/" + loggedInUser.avatarUrl, crossorigin).avatar
         h3=user.name
     div.video-grid
         each video in user.videos
