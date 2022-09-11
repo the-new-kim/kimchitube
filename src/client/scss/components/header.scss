@@ -7,20 +7,7 @@ header {
     color: $red;
     font-size: 38px;
   }
-  ul {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    li {
-      margin-left: 30px;
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    i {
-      font-size: 16px;
-    }
-  }
+
   .header__btn {
     background-color: white;
     color: $bg;
@@ -31,5 +18,54 @@ header {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .empty__avatar {
+      width: 100%;
+      height: 100%;
+      background-color: #004c3f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-transform: uppercase;
+      font-size: 25px;
+    }
+  }
+}
+
+nav {
+  position: relative;
+}
+
+.nav__menu {
+  z-index: 100;
+  padding: 30px;
+  background-color: #2f2f2f;
+  border-radius: 10px;
+  border: 1px solid rgb(105, 105, 105);
+  min-width: 200px;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity ease-out 500ms, visibility ease-out 500ms;
+
+  &.showing {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  li:not(:last-child) {
+    margin-bottom: 30px;
   }
 }

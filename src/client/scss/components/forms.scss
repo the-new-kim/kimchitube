@@ -1,15 +1,13 @@
-form {
+form:not(.search__form) {
   max-width: 420px;
   margin: 0 auto;
-  &:not(.search__form) {
-    padding: 30px;
-    background-color: rgba($color: $bg, $alpha: 0.7);
-    border-radius: 10px;
-    border: 1px solid rgba($color: #fff, $alpha: 0.1);
-  }
+  padding: 30px;
+  background-color: rgba($color: $bg, $alpha: 0.7);
+  border-radius: 10px;
+  border: 1px solid rgba($color: #fff, $alpha: 0.1);
 }
 
-input:not(input[type="range"]) {
+input:not(input[type="range"], input[type="checkbox"]) {
   all: unset;
   padding: 15px 20px;
   border-radius: 5px;
@@ -37,5 +35,24 @@ input[type="submit"],
     background-color: gray;
     color: darkslategray;
     cursor: not-allowed !important;
+  }
+}
+
+.search__form {
+  position: relative;
+  .search__input {
+    margin: 0;
+  }
+
+  .search__submit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto 0;
+    cursor: pointer;
+    background-color: Transparent;
+    color: white;
+    border: none;
   }
 }

@@ -110,11 +110,19 @@ export const remove = (req, res) => res.send("remove");
 export const see = async (req, res) => {
   const { id } = req.params;
 
-  const user = await User.findById(id).populate("videos");
+  // how to populate an array
+  // https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
+
+  const user = await User.findById(id).populate({
+    path: "videos",
+    populate: { path: "owner" },
+  });
 
   if (!user) {
     return res.render("user/profile", { pageTitle: "User not found." });
   }
+
+  console.log(user.videos);
 
   return res.render("user/profile", {
     pageTitle: `${user.name}'s Profile.`,

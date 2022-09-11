@@ -1,24 +1,28 @@
 header
     a(href="/")=siteTitle
+    div
+        form(method="GET").search__form.searchForm
+            input(name="keyword" type="text" placeholder="search by keyword" required).search__input
+            button(type="submit").search__submit
+                i.fa-solid.fa-magnifying-glass
 
-    nav 
-        ul
-            li 
-                a(href="/search") search 
-            if loggedIn
-                li
-                    a(href="/video/upload") upload 
+    nav
+        if loggedIn
+            div.navAvatar.header__avatar
+                if loggedInUser.avatarUrl === "" || !loggedInUser.avatarUrl
+                    div.empty__avatar=loggedInUser.name[0]
+                else
+                    img(src=isHeroku || loggedInUser.socialOnly ? loggedInUser.avatarUrl : "/" + loggedInUser.avatarUrl, crossorigin)
+            ul.nav__menu.navMenu
                 li 
-                    a(href="/user/logout") Logout
+                    a(href=`/user/${loggedInUser._id}`) Your Channel
+                li
+                    a(href="/video/upload") Upload Video 
                 li
                     a(href="/user/edit") Edit Profile
-                li
-                    a(href=`/user/${loggedInUser._id}`)
-                        if loggedInUser.avatarUrl === "" || !loggedInUser.avatarUrl
-                            span 😀
-                        else
-                            img.header__avatar(src=isHeroku || loggedInUser.socialOnly ? loggedInUser.avatarUrl : "/" + loggedInUser.avatarUrl, crossorigin)
-            else
-                li
-                    a(href="/login") Login 
+                li 
+                    a(href="/user/logout") Logout
+
+        else
+            a(href="/login") Login 
             
