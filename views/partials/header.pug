@@ -1,19 +1,19 @@
 header
     a(href="/")=siteTitle
     div
-        form(method="GET").search__form.searchForm
+        form(method="GET" action="/search").search__form.searchForm
             input(name="keyword" type="text" placeholder="search by keyword" required).search__input
             button(type="submit").search__submit
                 i.fa-solid.fa-magnifying-glass
 
     nav
         if loggedIn
-            div.navAvatar.header__avatar
+            div.userNavBtn.header__avatar
                 if loggedInUser.avatarUrl === "" || !loggedInUser.avatarUrl
                     div.empty__avatar=loggedInUser.name[0]
                 else
                     img(src=isHeroku || loggedInUser.socialOnly ? loggedInUser.avatarUrl : "/" + loggedInUser.avatarUrl, crossorigin)
-            ul.nav__menu.navMenu
+            ul.nav__menu.userNavMenu
                 li 
                     a(href=`/user/${loggedInUser._id}`) Your Channel
                 li

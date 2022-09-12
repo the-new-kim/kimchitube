@@ -1,0 +1,5 @@
+mixin avatar(avatarOwner)
+    if avatarOwner.avatarUrl === "" || !avatarOwner.avatarUrl
+        div.empty__avatar=avatarOwner.name[0]
+    else
+        img(src=isHeroku || avatarOwner.socialOnly ? avatarOwner.avatarUrl : "/" + avatarOwner.avatarUrl, crossorigin)

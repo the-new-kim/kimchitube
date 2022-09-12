@@ -1,54 +1,87 @@
 extends ../base
+include ../mixins/avatar
 
 block body
-    div#videoContainer(data-id=video._id)
-        video(src=isHeroku ? video.fileUrl : "/" + video.fileUrl, crossorigin)
+    h1=isHeroku
+    div.video__container
+        div.video__main
+            div#videoPlayer(data-id=video._id)
+                video(src=isHeroku ? video.fileUrl : "/" + video.fileUrl, crossorigin)
 
-        div#videoControls.videoControls
-            div.videoControls__play
-                span#play.videoControls__playBtn
-                    i.fas.fa-play
-                div.videoControls__time
-                    span#currentTime 00:00
-                    span  / 
-                    span#totalTime 00:00
-            input(type="range",step="1", value="0", min="0")#timeline.videoControls__timeline
-            div.videoControls__volume
-                input(type="range",step="0.1", value=0.5, min="0", max="1")#volume
-                span#mute
-                    i.fas.fa-volume-up
-                span#fullScreen
-                    i.fas.fa-expand
+                div#videoControls.videoControls
+                    div.videoControls__play
+                        span#play.videoControls__playBtn
+                            i.fas.fa-play
+                        div.videoControls__time
+                            span#currentTime 00:00
+                            span  / 
+                            span#totalTime 00:00
+                    input(type="range",step="1", value="0", min="0")#timeline.videoControls__timeline
+                    div.videoControls__volume
+                        input(type="range",step="0.1", value=0.5, min="0", max="1")#volume
+                        span#mute
+                            i.fas.fa-volume-up
+                        span#fullScreen
+                            i.fas.fa-expand
 
-    //- p=video.description
-    //- small uploaded by 
-    //-     a(href=`/user/${video.owner._id}`)=video.owner.name
-    //- hr
+            //- p=video.description
+            //- small uploaded by 
+            //-     a(href=`/user/${video.owner._id}`)=video.owner.name
+            //- hr
 
-    div.video__data
-        p.video__title=video.title
-        small.video__owner Uploaded by 
-            a(href=`/user/${video.owner._id}`)=video.owner.name
-        small.video__createdAt=new Date(video.createdAt).toLocaleDateString("us-en", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
-        br
-
-    if loggedIn
-        div.video__add-comments
-            form.video__comment-form#commentForm(data-logged-in-user=loggedInUser.name)
-                textarea(cols="30", rows="10", placeholder="Write a nice commment...")
-                button Add Comment
-    div.video__comments
-        ul
-            each comment in video.comments.reverse()
-                li.video__comment(data-comment-id=comment._id)
-                    span #{comment.owner.name} : #{comment.text}
-                    if loggedIn && loggedInUser._id + "" === comment.owner._id + ""
-                        button.deleteButton ❌
-
-        if loggedIn && video.owner._id + "" === loggedInUser._id + ""
-            a(href=`${video.id}/edit`) edit video
-            a(href=`${video.id}/delete`) delete video
+            div.video__data
+                ul.video__hash-tags
+                    each tag in video.hashtags
+                        li
+                            a(href=`/search?keyword=${tag.replace("#","")}`)=tag
+                p.video__title=video.title
+                small.video__createdAt=new Date(video.createdAt).toLocaleDateString("us-en", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+                hr
+    
+                a(href=`/user/${video.owner._id}`).video__owner
+                    div.avatar.avatar__sm
+                        +avatar(video.owner)
+                    span=video.owner.name
+                div.video__desciprtion=video.description
+                
+                
+                if loggedIn && video.owner._id + "" === loggedInUser._id + ""
+                    div.video__admin
+                        a(href=`${video.id}/edit`) Edit
+                        a(href=`${video.id}/delete`) Delete    
             
+            
+            
+            if loggedIn
+                div.video__add-comments
+                    div.avatar.avatar__sm
+                        +avatar(loggedInUser)
+                    form.video__comment-form#commentForm(data-logged-in-user=loggedInUser.name)
+                        input.video__comment-input(type="text" placeholder="Write a nice commment..." required)
+                        button Add Comment
+
+            div.video__comments__container
+                div.video__comments-total
+                    span.commentsNumber=video.comments.length
+                    span.commentsText #{video.comments.length > 1 ? " Comments" : " Comment"}
+                ul.video__comments
+                    each comment in video.comments.reverse()
+                        li.video__comment(data-comment-id=comment._id)
+                            div.avatar.avatar__sm
+                                    a(href=`/user/${comment.owner._id}`)
+                                        +avatar(comment.owner)
+                            div.video__comment__main
+                                
+                                div
+                                    a(href=`/user/${comment.owner._id}`)=comment.owner.name
+                                p=comment.text
+                                div.video__comment__buttons
+                                if loggedIn && loggedInUser._id + "" === comment.owner._id + ""
+                                    i.deleteButton.fa-solid.fa-trash
+
+        div.related-videos Related Videos
+    
+    
 block scripts
     script(src="/static/js/videoPlayer.js")
     if loggedIn

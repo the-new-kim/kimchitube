@@ -10,7 +10,7 @@ header {
 
   .header__btn {
     background-color: white;
-    color: $bg;
+    color: $bg-dark;
     padding: 5px 10px;
     border-radius: 5px;
   }
@@ -28,12 +28,12 @@ header {
     .empty__avatar {
       width: 100%;
       height: 100%;
-      background-color: #004c3f;
+      background-color: $border-gray;
       display: flex;
       justify-content: center;
       align-items: center;
       text-transform: uppercase;
-      font-size: 25px;
+      font-size: 20px;
     }
   }
 }
@@ -47,7 +47,7 @@ nav {
   padding: 30px;
   background-color: #2f2f2f;
   border-radius: 10px;
-  border: 1px solid rgb(105, 105, 105);
+  border: 1px solid $border-gray-light;
   min-width: 200px;
   position: absolute;
   top: calc(100% + 10px);
@@ -58,7 +58,7 @@ nav {
   align-items: flex-start;
   opacity: 0;
   visibility: hidden;
-  transition: opacity ease-out 500ms, visibility ease-out 500ms;
+  transition: opacity ease-out 300ms, visibility ease-out 300ms;
 
   &.showing {
     opacity: 1;

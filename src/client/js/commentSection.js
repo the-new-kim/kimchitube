@@ -1,14 +1,26 @@
-const videoContainer = document.getElementById("videoContainer");
+const videoPlayer = document.getElementById("videoPlayer");
 const form = document.getElementById("commentForm");
 const deleteButtons = document.querySelectorAll(".deleteButton");
+const commentsNumber = document.querySelector(".commentsNumber");
+const commentsText = document.querySelector(".commentsText");
 
-const videoId = videoContainer.dataset.id;
+let currentCommentsNumber = +commentsNumber.innerText;
+
+const videoId = videoPlayer.dataset.id;
+
+const repaintCommentsNumber = () => {
+  commentsNumber.innerText = currentCommentsNumber;
+  commentsText.innerText = currentCommentsNumber > 1 ? " Comments" : " Comment";
+};
 
 const handleDelete = async (event) => {
-  const { parentElement } = event.target;
+  const commentContainer = event.target.closest(".video__comment");
+
+  console.log(commentContainer);
+
   const {
     dataset: { commentId },
-  } = parentElement;
+  } = commentContainer;
 
   await fetch(`/api/comment/${commentId}/delete`, {
     method: "DELETE",
@@ -16,35 +28,51 @@ const handleDelete = async (event) => {
     body: JSON.stringify({ videoId }),
   });
 
-  parentElement.remove();
+  currentCommentsNumber -= 1;
+  repaintCommentsNumber();
+
+  commentContainer.remove();
 };
 
-const addFakeComment = (text, commentId, name) => {
-  const videoContents = document.querySelector(".video__comments ul");
+const addFakeComment = (text, commentId, user) => {
+  const { _id, name, avatarUrl, socialOnly } = user;
+  const videoContents = document.querySelector(".video__comments");
 
   const newComment = document.createElement("li");
   newComment.classList.add("video__comment");
   newComment.dataset.commentId = commentId;
+
+  const avatarContainer = document.createElement("div");
+  avatarContainer.classList.add("avatar", "avatar__sm");
+  // if(avatarUrl)
+
+  const commentMain = document.createElement("div");
+  commentMain.classList.add("video__comment__main");
+
   const span = document.createElement("span");
-  const button = document.createElement("button");
+
+  const deleteIcon = document.createElement("i");
 
   span.innerText = `${name} : ${text}`;
-  button.innerText = "❌";
-  button.classList.add("btn");
+
+  deleteIcon.classList.add("deleteButton", "fa-solid", "fa-trash");
 
   newComment.appendChild(span);
-  newComment.appendChild(button);
+  newComment.appendChild(deleteIcon);
   videoContents.prepend(newComment);
 
-  button.addEventListener("click", handleDelete);
+  currentCommentsNumber += 1;
+  repaintCommentsNumber();
+
+  deleteIcon.addEventListener("click", handleDelete);
 };
 
 const handleSubmit = async (event) => {
   event.preventDefault();
 
-  const textarea = form.querySelector("textarea");
+  const input = form.querySelector("input");
 
-  const text = textarea.value;
+  const text = input.value;
 
   if (text === "") return;
 
@@ -56,11 +84,10 @@ const handleSubmit = async (event) => {
   });
 
   if (response.status === 201) {
-    const { commentId, name } = await response.json();
-
-    addFakeComment(text, commentId, name);
+    const { commentId, user } = await response.json();
+    addFakeComment(text, commentId, user);
   }
-  textarea.value = "";
+  input.value = "";
 };
 
 if (form) {

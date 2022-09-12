@@ -116,12 +116,13 @@ export const postUpload = async (req, res) => {
   const {
     session: {
       user: { _id },
+      isHeroku,
     },
     body: { title, description, hashtags },
     files: { video, thumbnail },
   } = req;
 
-  const isHeroku = process.env.NODE_ENV === "production";
+  // const isHeroku = process.env.NODE_ENV === "production";
 
   try {
     const newVideo = await Video.create({
@@ -225,6 +226,8 @@ export const createComment = async (req, res) => {
     return res.sendStatus(404);
   }
 
+  const { _id, name, avatarUrl, socialOnly } = user;
+
   const comment = await Comment.create({
     text,
     owner: userId,
@@ -236,7 +239,13 @@ export const createComment = async (req, res) => {
   user.comments.push(comment._id);
   user.save();
 
-  return res.status(201).json({ commentId: comment._id, name: user.name }); // 201: created
+  console.log(req.session.isHeroku);
+
+  return res.status(201).json({
+    commentId: comment._id,
+    user: { _id, name, avatarUrl, socialOnly },
+  });
+  // 201: created
 };
 
 export const deleteComment = async (req, res) => {

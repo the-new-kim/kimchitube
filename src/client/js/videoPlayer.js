@@ -1,4 +1,4 @@
-const videoContainer = document.getElementById("videoContainer");
+const videoPlayer = document.getElementById("videoPlayer");
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
 const playBtnIcon = playBtn.querySelector("i");
@@ -77,7 +77,7 @@ const handleFullScreen = () => {
     document.exitFullscreen();
     fullScreenIcon.classList = "fas fa-expand";
   } else {
-    videoContainer.requestFullscreen();
+    videoPlayer.requestFullscreen();
     fullScreenIcon.classList = "fas fa-compress";
   }
 };
@@ -123,7 +123,7 @@ const handleKeydown = (event) => {
 };
 
 const handleEnded = () => {
-  const { id } = videoContainer.dataset;
+  const { id } = videoPlayer.dataset;
   fetch(`/api/video/${id}/view`, { method: "POST" });
 };
 
@@ -139,6 +139,6 @@ video.addEventListener("ended", handleEnded);
 
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
-videoContainer.addEventListener("mousemove", handleMouseMove);
-videoContainer.addEventListener("mouseleave", handleMouseLeave);
+videoPlayer.addEventListener("mousemove", handleMouseMove);
+videoPlayer.addEventListener("mouseleave", handleMouseLeave);
 document.addEventListener("keydown", handleKeydown);

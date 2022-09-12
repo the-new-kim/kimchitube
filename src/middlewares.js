@@ -28,6 +28,7 @@ export const localsMiddleware = (req, res, next) => {
   res.locals.siteTitle = "Youtube Clone";
   res.locals.loggedInUser = req.session.user;
   res.locals.isHeroku = isHeroku;
+
   next();
 };
 
