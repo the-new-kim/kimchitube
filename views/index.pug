@@ -2,6 +2,7 @@ extends base
 include mixins/video
 
 block body
+    h1=isHeroku
     div.video-grid
         each video in videos
             +video(video)
