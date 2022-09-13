@@ -56,7 +56,31 @@ export const watch = async (req, res) => {
     return res.render("404", { pageTitle: "Video not found." });
   }
 
-  return res.render("video/watch", { video });
+  const regex = new RegExp(
+    `(${video.hashtags.toString().replaceAll(",", "|")})`,
+    "i"
+  );
+
+  const relatedVideos = await Video.find({
+    $and: [
+      //$ne : Not Equal
+      { _id: { $ne: video._id } },
+      {
+        $or: [
+          {
+            owner: video.owner._id,
+          },
+          {
+            hashtags: {
+              $regex: regex,
+            },
+          },
+        ],
+      },
+    ],
+  }).populate("owner");
+
+  return res.render("video/watch", { video, relatedVideos });
 };
 
 export const getEdit = async (req, res) => {
@@ -215,6 +239,7 @@ export const createComment = async (req, res) => {
   const {
     session: {
       user: { _id: userId },
+      isHeroku,
     },
     body: { text },
     params: { id: videoId },
@@ -239,11 +264,10 @@ export const createComment = async (req, res) => {
   user.comments.push(comment._id);
   user.save();
 
-  console.log(req.session.isHeroku);
-
   return res.status(201).json({
     commentId: comment._id,
     user: { _id, name, avatarUrl, socialOnly },
+    isHeroku,
   });
   // 201: created
 };

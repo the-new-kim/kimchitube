@@ -5,15 +5,17 @@
 
   .video__main {
     flex-grow: 2;
-    & > * {
+    & > *:not(:first-child) {
       margin-top: 40px;
     }
   }
 
   .related-videos {
-    width: 300px;
-    height: 100vh;
-    background-color: red;
+    max-width: 400px;
+    padding-left: 20px;
+    > * {
+      margin-bottom: 10px;
+    }
   }
 }
 
@@ -44,9 +46,26 @@
     font-size: 26px;
     margin-bottom: 10px;
   }
-  .video__createdAt {
-    font-size: 12px;
+  .video__meta-and-likes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .video__meta {
+      font-size: 12px;
+      color: gainsboro;
+    }
+    .video__likes {
+      > * {
+        margin-right: 10px;
+      }
+      i {
+        cursor: pointer;
+
+        font-size: 20px;
+      }
+    }
   }
+
   .video__owner {
     display: flex;
     width: fit-content;
@@ -156,14 +175,16 @@
           margin-bottom: 10px;
         }
 
-        & > i {
-          cursor: pointer;
-        }
-
         .video__comment__buttons {
           display: flex;
           justify-content: flex-start;
           align-items: center;
+          i {
+            cursor: pointer;
+          }
+          & > * {
+            margin-right: 10px;
+          }
         }
       }
     }

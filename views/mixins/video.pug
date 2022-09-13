@@ -1,16 +1,30 @@
-mixin video(video)
+mixin video(video, isGrid = true)
+    if isGrid
+        a(href=`/video/${video.id}`).video-mixin
+            div.video-mixin__thumb
+                img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
+            div.video-mixin__data
+                span.video-mixin__title=video.title
+                div.video-mixin__meta
+                    span #{video.owner.name} • 
+                    span #{video.meta.views} 
+                        if(video.meta.videws > 1)
+                            span views 
+                        else 
+                            span view
+    else 
+        a(href=`/video/${video.id}`).video-mixin-flex
+            div.video-mixin-flex__thumb
+                img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
+            div.video-mixin-flex__data
+                span.video-mixin-flex__title=video.title
 
-    a(href=`/video/${video.id}`).video-mixin
-        div.video-mixin__thumb
-            img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
-        div.video-mixin__data
-            span.video-mixin__title=video.title
-            div.video-mixin__meta
-                span #{video.owner.name} • 
-                span #{video.meta.views} 
-                    if(video.meta.videws > 1)
-                        span views 
-                    else 
-                        span view
+                div.video-mixin-flex__meta
+                    span #{video.owner.name} • 
+                    span #{video.meta.views} 
+                        if(video.meta.videws > 1)
+                            span views 
+                        else 
+                            span view
 
 

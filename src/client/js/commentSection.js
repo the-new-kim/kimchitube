@@ -16,8 +16,6 @@ const repaintCommentsNumber = () => {
 const handleDelete = async (event) => {
   const commentContainer = event.target.closest(".video__comment");
 
-  console.log(commentContainer);
-
   const {
     dataset: { commentId },
   } = commentContainer;
@@ -34,7 +32,7 @@ const handleDelete = async (event) => {
   commentContainer.remove();
 };
 
-const addFakeComment = (text, commentId, user) => {
+const addFakeComment = (text, commentId, user, isHeroku) => {
   const { _id, name, avatarUrl, socialOnly } = user;
   const videoContents = document.querySelector(".video__comments");
 
@@ -44,27 +42,43 @@ const addFakeComment = (text, commentId, user) => {
 
   const avatarContainer = document.createElement("div");
   avatarContainer.classList.add("avatar", "avatar__sm");
-  // if(avatarUrl)
+  const avatarAnchor = document.createElement("a");
+  avatarAnchor.href = `/user/${_id}`;
+  avatarContainer.appendChild(avatarAnchor);
+  if (avatarUrl) {
+    const img = document.createElement("img");
+    img.src = isHeroku || socialOnly ? avatarUrl : "/" + avatarUrl;
+    avatarAnchor.appendChild(img);
+  } else {
+    const emptyAvatar = document.createElement("div");
+    emptyAvatar.classList.add("empty__avatar");
+    emptyAvatar.innerHTML = name[0];
+    avatarAnchor.appendChild(emptyAvatar);
+  }
 
   const commentMain = document.createElement("div");
   commentMain.classList.add("video__comment__main");
+  const userNameAnchor = document.createElement("a");
+  userNameAnchor.hfref = `/user/${_id}`;
+  userNameAnchor.innerText = name;
+  const description = document.createElement("p");
+  description.innerText = text;
+  const deleteButton = document.createElement("i");
+  deleteButton.classList.add("deleteButton", "fa-solid", "fa-trash");
 
-  const span = document.createElement("span");
+  commentMain.appendChild(userNameAnchor);
+  commentMain.appendChild(description);
+  commentMain.appendChild(deleteButton);
 
-  const deleteIcon = document.createElement("i");
+  newComment.appendChild(avatarContainer);
+  newComment.appendChild(commentMain);
 
-  span.innerText = `${name} : ${text}`;
-
-  deleteIcon.classList.add("deleteButton", "fa-solid", "fa-trash");
-
-  newComment.appendChild(span);
-  newComment.appendChild(deleteIcon);
   videoContents.prepend(newComment);
 
   currentCommentsNumber += 1;
   repaintCommentsNumber();
 
-  deleteIcon.addEventListener("click", handleDelete);
+  deleteButton.addEventListener("click", handleDelete);
 };
 
 const handleSubmit = async (event) => {
@@ -84,8 +98,8 @@ const handleSubmit = async (event) => {
   });
 
   if (response.status === 201) {
-    const { commentId, user } = await response.json();
-    addFakeComment(text, commentId, user);
+    const { commentId, user, isHeroku } = await response.json();
+    addFakeComment(text, commentId, user, isHeroku);
   }
   input.value = "";
 };
