@@ -1,16 +1,15 @@
 extends ../base
 include ../mixins/video
+include ../mixins/avatar
 
 block body
-    h1=pageTitle
-
     div.profile__data
-        if loggedInUser.avatarUrl
-            img.header__avatar(src=isHeroku || loggedInUser.socialOnly ? loggedInUser.avatarUrl : "/" + loggedInUser.avatarUrl, crossorigin).avatar
+        div.avatar
+            +avatar(user)
         h3=user.name
     div.video-grid
         each video in user.videos
-            +video(video)
+            +video(video, videoMixinTypes.profile)
         else
             span.empty__message No videos found
 

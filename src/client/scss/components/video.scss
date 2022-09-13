@@ -7,6 +7,7 @@
     width: 100%;
     background-color: ivory;
     overflow: hidden;
+
     img {
       width: 100%;
       height: 100%;
@@ -14,26 +15,31 @@
     }
   }
   .video-mixin__data {
-    padding: 0px 15px;
-    .video-mixin__title {
-      font-size: 18px;
-      display: block;
-      margin-top: 10px;
+    // padding: 0px 15px;
+    margin-top: 10px;
+    display: flex;
+
+    .video-mixin__data__left {
+      margin-right: 5px;
     }
-    .video-mixin__meta {
-      margin-top: 5px;
-      font-size: 12px;
+    .video-mixin__data__right {
+      display: flex;
+      flex-direction: column;
+      .video-mixin__title {
+        font-size: 18px;
+        display: block;
+      }
+      .video-mixin__meta {
+        margin-top: 5px;
+        font-size: 12px;
+      }
     }
   }
 }
 
-.video-mixin-flex {
-  display: flex;
-  justify-content: space-between;
-  > * {
-    flex-basis: 50%;
-  }
-  .video-mixin-flex__thumb {
+// video mixin
+.video-mixin-profile {
+  .video-mixin-profile__thumb {
     // height: 150px;
     aspect-ratio: 1.85/1;
     border-radius: 7px;
@@ -46,13 +52,46 @@
       object-fit: cover;
     }
   }
-  .video-mixin-flex__data {
-    padding-left: 10px;
-    .video-mixin-flex__title {
+  .video-mixin-profile__data {
+    margin-top: 10px;
+
+    .video-mixin-profile__title {
       font-size: 18px;
       display: block;
     }
-    .video-mixin-flex__meta {
+    .video-mixin-profile__meta {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+  }
+}
+
+.video-mixin-related {
+  display: flex;
+  justify-content: space-between;
+  > * {
+    flex-basis: 50%;
+  }
+  .video-mixin-related__thumb {
+    // height: 150px;
+    aspect-ratio: 1.85/1;
+    border-radius: 7px;
+    width: 100%;
+    background-color: ivory;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .video-mixin-related__data {
+    padding-left: 10px;
+    .video-mixin-related__title {
+      font-size: 18px;
+      display: block;
+    }
+    .video-mixin-related__meta {
       margin-top: 5px;
       font-size: 12px;
     }

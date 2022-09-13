@@ -120,13 +120,12 @@ export const see = async (req, res) => {
   });
 
   if (!user) {
-    return res.render("user/profile", { pageTitle: "User not found." });
+    req.flash("error", "User Not Found");
+    return res.status(404).render("404", { pageTitle: "User not found" });
   }
 
-  console.log(user.videos);
-
   return res.render("user/profile", {
-    pageTitle: `${user.name}'s Profile.`,
+    pageTitle: `${user.name}'s Channel`,
     user,
   });
 };

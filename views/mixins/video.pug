@@ -1,25 +1,46 @@
-mixin video(video, isGrid = true)
-    if isGrid
+include ./avatar
+
+mixin video(video, videoMixinType = videoMixinTypes.index)
+
+    if videoMixinType === videoMixinTypes.index
         a(href=`/video/${video.id}`).video-mixin
             div.video-mixin__thumb
                 img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
+   
             div.video-mixin__data
-                span.video-mixin__title=video.title
-                div.video-mixin__meta
-                    span #{video.owner.name} • 
+                .video-mixin__data__left 
+                    .avatar.avatar__xs 
+                        +avatar(video.owner)
+                .video-mixin__data__right 
+                    div.video-mixin__title=video.title
+                    div.video-mixin__meta
+                        span #{video.owner.name} • 
+                        span #{video.meta.views} 
+                            if(video.meta.videws > 1)
+                                span views 
+                            else 
+                                span view
+    else if videoMixinType === videoMixinTypes.profile
+        a(href=`/video/${video.id}`).video-mixin-profile
+            div.video-mixin-profile__thumb
+                img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
+   
+            div.video-mixin-profile__data
+                div.video-mixin-profile__title=video.title
+                div.video-mixin-profile__meta
                     span #{video.meta.views} 
                         if(video.meta.videws > 1)
                             span views 
                         else 
                             span view
-    else 
-        a(href=`/video/${video.id}`).video-mixin-flex
-            div.video-mixin-flex__thumb
+    else
+        a(href=`/video/${video.id}`).video-mixin-related
+            div.video-mixin-related__thumb
                 img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
-            div.video-mixin-flex__data
-                span.video-mixin-flex__title=video.title
+            div.video-mixin-related__data
+                span.video-mixin-related__title=video.title
 
-                div.video-mixin-flex__meta
+                div.video-mixin-related__meta
                     span #{video.owner.name} • 
                     span #{video.meta.views} 
                         if(video.meta.videws > 1)

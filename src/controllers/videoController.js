@@ -80,7 +80,11 @@ export const watch = async (req, res) => {
     ],
   }).populate("owner");
 
-  return res.render("video/watch", { video, relatedVideos });
+  return res.render("video/watch", {
+    pageTitle: video.title,
+    video,
+    relatedVideos,
+  });
 };
 
 export const getEdit = async (req, res) => {

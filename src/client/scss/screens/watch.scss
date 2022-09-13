@@ -66,16 +66,31 @@
     }
   }
 
-  .video__owner {
-    display: flex;
-    width: fit-content;
-    justify-content: flex-start;
-    align-items: center;
-    & > span {
-      margin-left: 10px;
+  .video__owner-and-description {
+    display: grid;
+    grid-template-areas:
+      "avatar name"
+      ". description";
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+
+    .video__owner-avatar {
+      grid-area: avatar;
+    }
+
+    .video__owner-name {
+      grid-area: name;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
       font-size: 20px;
     }
+
+    .video__desciprtion {
+      grid-area: description;
+    }
   }
+
   .video__admin {
     display: flex;
     justify-content: flex-end;

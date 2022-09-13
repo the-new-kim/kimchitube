@@ -3,3 +3,4 @@ node_modules
 uploads
 assets
 build
+.DS_Store

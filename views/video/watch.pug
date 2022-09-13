@@ -46,12 +46,14 @@ block body
                         i.fa-regular.fa-thumbs-down
                         span 0
                 hr
-    
-                a(href=`/user/${video.owner._id}`).video__owner
-                    div.avatar.avatar__sm
-                        +avatar(video.owner)
-                    span=video.owner.name
-                div.video__desciprtion=video.description
+
+                .video__owner-and-description
+                    a(href=`/user/${video.owner._id}`).video__owner-avatar
+                        div.avatar.avatar__sm
+                            +avatar(video.owner)
+                    h3.video__owner-name
+                        a(href=`/user/${video.owner._id}`)=video.owner.name
+                    p.video__desciprtion=video.description
                 
                 
                 if loggedIn && video.owner._id + "" === loggedInUser._id + ""
@@ -93,7 +95,7 @@ block body
 
         ul.related-videos.video-flex-col 
             each video in relatedVideos
-                +video(video, false)
+                +video(video, videoMixinTypes.related)
             else
                 span.empty__message No videos found 
     

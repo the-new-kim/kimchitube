@@ -1,18 +1,18 @@
+include ../mixins/avatar
+
 header
-    a(href="/")=siteTitle
-    div
+    a.header__logo(href="/")=siteTitle
+    
+    div.header__search
         form(method="GET" action="/search").search__form.searchForm
-            input(name="keyword" type="text" placeholder="search by keyword" required).search__input
+            input(name="keyword" type="text" placeholder="Search" required).search__input
             button(type="submit").search__submit
                 i.fa-solid.fa-magnifying-glass
 
-    nav
+    nav.header__nav
         if loggedIn
-            div.userNavBtn.header__avatar
-                if loggedInUser.avatarUrl === "" || !loggedInUser.avatarUrl
-                    div.empty__avatar=loggedInUser.name[0]
-                else
-                    img(src=isHeroku || loggedInUser.socialOnly ? loggedInUser.avatarUrl : "/" + loggedInUser.avatarUrl, crossorigin)
+            .avatar.avatar__sm.userNavBtn
+                +avatar(loggedInUser)
             ul.nav__menu.userNavMenu
                 li 
                     a(href=`/user/${loggedInUser._id}`) Your Channel

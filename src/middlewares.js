@@ -25,9 +25,14 @@ const s3VideoUploader = multerS3({
 
 export const localsMiddleware = (req, res, next) => {
   res.locals.loggedIn = Boolean(req.session.loggedIn);
-  res.locals.siteTitle = "Youtube Clone";
+  res.locals.siteTitle = "KIMCHI TUBE";
   res.locals.loggedInUser = req.session.user;
   res.locals.isHeroku = isHeroku;
+  res.locals.videoMixinTypes = {
+    index: "index",
+    profile: "Profile",
+    related: "Related",
+  };
 
   next();
 };
