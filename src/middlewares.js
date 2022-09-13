@@ -49,17 +49,49 @@ export const publicOnlyMiddleware = (req, res, next) => {
   }
 };
 
-export const avatarUpload = multer({
+const avatarMulter = multer({
   dest: "uploads/",
   limits: {
     fileSize: 3000000,
   },
   storage: isHeroku ? s3ImageUploader : undefined,
-});
-export const videoUpload = multer({
+}).single("avatar");
+
+export const avatarUpload = (req, res, next) => {
+  avatarMulter(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      req.flash("error", err.message);
+      return res.status(404).render("user/edit");
+    } else if (err) {
+      req.flash("error", err.message);
+      return res.status(404).redirect("/");
+    } else {
+      return next();
+    }
+  });
+};
+
+const videoMulter = multer({
   dest: "uploads/",
   limits: {
     fileSize: 10000000,
   },
   storage: isHeroku ? s3VideoUploader : undefined,
-});
+}).fields([
+  { name: "video", maxCount: 1 },
+  { name: "thumbnail", maxCount: 1 },
+]);
+
+export const videoUpload = (req, res, next) => {
+  videoMulter(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      req.flash("error", err.message);
+      return res.status(404).render("video/upload");
+    } else if (err) {
+      req.flash("error", err.message);
+      return res.status(404).redirect("/");
+    } else {
+      return next();
+    }
+  });
+};

@@ -19,7 +19,7 @@ userRouter
   .route("/edit")
   .all(protectorMiddleware)
   .get(getEdit)
-  .post(avatarUpload.single("avatar"), postEdit);
+  .post(avatarUpload, postEdit);
 userRouter
   .route("/change-password")
   .all(protectorMiddleware)

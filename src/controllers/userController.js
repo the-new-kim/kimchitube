@@ -75,7 +75,7 @@ export const logout = (req, res) => {
   return res.redirect("/");
 };
 export const getEdit = (req, res) => {
-  return res.render("user/edit-profile", { pageTitle: "Edit Profile" });
+  return res.render("user/edit", { pageTitle: "Edit Profile" });
 };
 
 export const postEdit = async (req, res) => {
