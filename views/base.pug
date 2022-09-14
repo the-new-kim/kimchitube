@@ -22,6 +22,8 @@ html(lang="en")
             +message("success", messages.success)
         include partials/header     
         main
+            if errorMessage 
+                span.error-message=errorMessage
             block body
         include partials/footer
         block scripts

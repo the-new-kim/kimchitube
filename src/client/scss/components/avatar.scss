@@ -22,16 +22,23 @@ span.avatar {
     justify-content: center;
     align-items: center;
     text-transform: uppercase;
-    font-size: 20px;
+    font-size: 100px;
   }
 
   &.avatar__sm {
     width: 40px;
     height: 40px;
+
+    .empty__avatar {
+      font-size: 20px;
+    }
   }
 
   &.avatar__xs {
     width: 30px;
     height: 30px;
+    .empty__avatar {
+      font-size: 15px;
+    }
   }
 }

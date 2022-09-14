@@ -16,7 +16,7 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
                     div.video-mixin__meta
                         span #{video.owner.name} • 
                         span #{video.meta.views} 
-                            if(video.meta.videws > 1)
+                            if video.meta.videws > 1
                                 span views 
                             else 
                                 span view
@@ -29,11 +29,12 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
                 div.video-mixin-profile__title=video.title
                 div.video-mixin-profile__meta
                     span #{video.meta.views} 
-                        if(video.meta.videws > 1)
+                        if video.meta.videws > 1
                             span views 
                         else 
                             span view
-    else
+
+    else if videoMixinType === videoMixinTypes.related
         a(href=`/video/${video.id}`).video-mixin-related
             div.video-mixin-related__thumb
                 img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
@@ -43,7 +44,7 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
                 div.video-mixin-related__meta
                     span #{video.owner.name} • 
                     span #{video.meta.views} 
-                        if(video.meta.videws > 1)
+                        if video.meta.videws > 1
                             span views 
                         else 
                             span view
