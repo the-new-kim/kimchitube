@@ -1,19 +1,19 @@
 const videoPlayer = document.getElementById("videoPlayer");
 const form = document.getElementById("commentForm");
 const deleteButtons = document.querySelectorAll(".deleteButton");
-const commentsNumber = document.querySelector(".commentsNumber");
+const commentsTotal = document.querySelector(".commentsTotal");
 const commentsText = document.querySelector(".commentsText");
 
-let currentCommentsNumber = +commentsNumber.innerText;
+let currentCommentsTotal = +commentsTotal.innerText;
 
 const videoId = videoPlayer.dataset.id;
 
-const repaintCommentsNumber = () => {
-  commentsNumber.innerText = currentCommentsNumber;
-  commentsText.innerText = currentCommentsNumber > 1 ? " Comments" : " Comment";
+const repaintCommentsTotal = () => {
+  commentsTotal.innerText = currentCommentsTotal;
+  commentsText.innerText = currentCommentsTotal > 1 ? " Comments" : " Comment";
 };
 
-const handleDelete = async (event) => {
+const handleCommentDelete = async (event) => {
   const commentContainer = event.target.closest(".video__comment");
 
   const {
@@ -26,8 +26,8 @@ const handleDelete = async (event) => {
     body: JSON.stringify({ videoId }),
   });
 
-  currentCommentsNumber -= 1;
-  repaintCommentsNumber();
+  currentCommentsTotal -= 1;
+  repaintCommentsTotal();
 
   commentContainer.remove();
 };
@@ -47,6 +47,7 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   avatarContainer.appendChild(avatarAnchor);
   if (avatarUrl) {
     const img = document.createElement("img");
+    img.crossOrigin = "Anonymous";
     img.src = isHeroku || socialOnly ? avatarUrl : "/" + avatarUrl;
     avatarAnchor.appendChild(img);
   } else {
@@ -61,27 +62,46 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   const userNameAnchor = document.createElement("a");
   userNameAnchor.hfref = `/user/${_id}`;
   userNameAnchor.innerText = name;
-  const description = document.createElement("p");
-  description.innerText = text;
+  const commentText = document.createElement("p");
+  commentText.innerText = text;
+
+  const buttonContainer = document.createElement("div");
+  buttonContainer.classList.add("video__comment__buttons");
+  const likeBtn = document.createElement("i");
+  likeBtn.classList.add("fa-regular", "fa-thumbs-up");
+  const likeCount = document.createElement("span");
+  likeCount.innerText = 0;
+
+  const dislikeBtn = document.createElement("i");
+  dislikeBtn.classList.add("fa-regular", "fa-thumbs-down");
+  const dislikeCount = document.createElement("span");
+  dislikeCount.innerText = 0;
+
   const deleteButton = document.createElement("i");
   deleteButton.classList.add("deleteButton", "fa-solid", "fa-trash");
 
+  buttonContainer.appendChild(likeBtn);
+  buttonContainer.appendChild(likeCount);
+  buttonContainer.appendChild(dislikeBtn);
+  buttonContainer.appendChild(dislikeCount);
+  buttonContainer.appendChild(deleteButton);
+
   commentMain.appendChild(userNameAnchor);
-  commentMain.appendChild(description);
-  commentMain.appendChild(deleteButton);
+  commentMain.appendChild(commentText);
+  commentMain.appendChild(buttonContainer);
 
   newComment.appendChild(avatarContainer);
   newComment.appendChild(commentMain);
 
   videoContents.prepend(newComment);
 
-  currentCommentsNumber += 1;
-  repaintCommentsNumber();
+  currentCommentsTotal += 1;
+  repaintCommentsTotal();
 
-  deleteButton.addEventListener("click", handleDelete);
+  deleteButton.addEventListener("click", handleCommentDelete);
 };
 
-const handleSubmit = async (event) => {
+const handleCommentSubmit = async (event) => {
   event.preventDefault();
 
   const input = form.querySelector("input");
@@ -105,11 +125,11 @@ const handleSubmit = async (event) => {
 };
 
 if (form) {
-  form.addEventListener("submit", handleSubmit);
+  form.addEventListener("submit", handleCommentSubmit);
 }
 
 if (deleteButtons) {
   deleteButtons.forEach((button) =>
-    button.addEventListener("click", handleDelete)
+    button.addEventListener("click", handleCommentDelete)
   );
 }

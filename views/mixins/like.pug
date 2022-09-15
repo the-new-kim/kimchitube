@@ -1,0 +1,12 @@
+mixin like(model)
+    if loggedIn && model.meta.likeUsers.includes(loggedInUser._id+"")
+        i.fa-solid.fa-thumbs-up.likeBtn
+    else
+        i.fa-regular.fa-thumbs-up.likeBtn
+    span.likeCount=model.meta.likeUsers.length
+
+    if loggedIn && model.meta.dislikeUsers.includes(loggedInUser._id+"")
+        i.fa-solid.fa-thumbs-down.dislikeBtn
+    else
+        i.fa-regular.fa-thumbs-down.dislikeBtn
+    span.dislikeCount=model.meta.dislikeUsers.length

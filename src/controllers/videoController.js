@@ -266,6 +266,8 @@ export const createComment = async (req, res) => {
   user.comments.push(comment._id);
   user.save();
 
+  // req.session.relaod();
+
   return res.status(201).json({
     commentId: comment._id,
     user: { _id, name, avatarUrl, socialOnly },
@@ -305,4 +307,64 @@ export const deleteComment = async (req, res) => {
   video.save();
 
   return res.sendStatus(201);
+};
+
+export const likeComment = (req, res) => {};
+
+/// like video helper
+const removeLikeOrDislikeUser = (video, user, likeOrDislike) => {
+  const newLikeUsers = video.meta[likeOrDislike].filter(
+    (likeOrDislikeUser) => likeOrDislikeUser + "" !== user._id + ""
+  );
+  video.meta[likeOrDislike] = newLikeUsers;
+};
+
+export const likeVideo = async (req, res) => {
+  const {
+    session: {
+      user: { _id: userId },
+    },
+    body: { isLikeHit },
+    params: { id: videoId },
+  } = req;
+
+  const user = await User.findById(userId);
+  const video = await Video.findById(videoId);
+
+  if (!user || !video) {
+    return res.sendStatus(404);
+  }
+
+  const isAlreadyLiked = video.meta.likeUsers.includes(user._id);
+  const isAlreadyDisiked = video.meta.dislikeUsers.includes(user._id);
+
+  if (isLikeHit) {
+    if (isAlreadyLiked) {
+      removeLikeOrDislikeUser(video, user, "likeUsers");
+    } else {
+      if (isAlreadyDisiked) {
+        removeLikeOrDislikeUser(video, user, "dislikeUsers");
+      }
+      video.meta.likeUsers.push(user._id);
+    }
+  } else {
+    if (isAlreadyDisiked) {
+      removeLikeOrDislikeUser(video, user, "dislikeUsers");
+    } else {
+      if (isAlreadyLiked) {
+        removeLikeOrDislikeUser(video, user, "likeUsers");
+      }
+
+      video.meta.dislikeUsers.push(user._id);
+    }
+  }
+
+  video.save();
+
+  return res.status(201).json({
+    likes: video.meta.likeUsers.length,
+    userLikesVideo: video.meta.likeUsers.includes(user._id),
+    dislikes: video.meta.dislikeUsers.length,
+    userDislikesVideo: video.meta.dislikeUsers.includes(user._id),
+  });
 };

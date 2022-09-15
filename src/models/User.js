@@ -23,6 +23,20 @@ const userSchema = new mongoose.Schema({
       ref: "Video",
     },
   ],
+  // likeVideos: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     required: true,
+  //     ref: "Video",
+  //   },
+  // ],
+  // dislikeVideos: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     required: true,
+  //     ref: "Video",
+  //   },
+  // ],
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
