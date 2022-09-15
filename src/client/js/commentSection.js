@@ -1,3 +1,5 @@
+import { initLike } from "./utils";
+
 const videoPlayer = document.getElementById("videoPlayer");
 const form = document.getElementById("commentForm");
 const deleteButtons = document.querySelectorAll(".deleteButton");
@@ -68,13 +70,15 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   const buttonContainer = document.createElement("div");
   buttonContainer.classList.add("video__comment__buttons");
   const likeBtn = document.createElement("i");
-  likeBtn.classList.add("fa-regular", "fa-thumbs-up");
+  likeBtn.classList.add("fa-regular", "fa-thumbs-up", "likeBtn");
   const likeCount = document.createElement("span");
+  likeCount.classList.add("likeCount");
   likeCount.innerText = 0;
 
   const dislikeBtn = document.createElement("i");
-  dislikeBtn.classList.add("fa-regular", "fa-thumbs-down");
+  dislikeBtn.classList.add("fa-regular", "fa-thumbs-down", "dislikeBtn");
   const dislikeCount = document.createElement("span");
+  dislikeCount.classList.add("dislikeCount");
   dislikeCount.innerText = 0;
 
   const deleteButton = document.createElement("i");
@@ -98,6 +102,7 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   currentCommentsTotal += 1;
   repaintCommentsTotal();
 
+  initLike(buttonContainer, "comment", commentId);
   deleteButton.addEventListener("click", handleCommentDelete);
 };
 

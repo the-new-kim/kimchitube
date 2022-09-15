@@ -74,7 +74,7 @@ block body
                 div.video__comments-total
                     span.commentsTotal=video.comments.length
                     span.commentsText #{video.comments.length > 1 ? " Comments" : " Comment"}
-                ul.video__comments
+                ul.video__comments#videoComments
                     each comment in video.comments.reverse()
                         li.video__comment(data-comment-id=comment._id)
                             div.avatar.avatar__sm

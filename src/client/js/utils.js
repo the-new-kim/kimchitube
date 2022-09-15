@@ -23,3 +23,60 @@ export const openNav = (btn, menu) => {
 
   document.body.addEventListener("click", handleClick);
 };
+
+export const initLike = (container, targetCategory, targetId) => {
+  const likeBtn = container.querySelector(".likeBtn");
+  const dislikeBtn = container.querySelector(".dislikeBtn");
+  const likeCount = container.querySelector(".likeCount");
+  const dislikeCount = container.querySelector(".dislikeCount");
+
+  const LIKE_REGULAR_CL = "fa-regular fa-thumbs-up likeBtn";
+  const LIKE_SOLID_CL = "fa-solid fa-thumbs-up likeBtn";
+
+  const DISLIKE_REGULAR_CL = "fa-regular fa-thumbs-down dislikeBtn";
+  const DISLIKE_SOLID_CL = "fa-solid fa-thumbs-down dislikeBtn";
+
+  const repaintLikeBtn = (likes, userLikesTarget, dislikes) => {
+    dislikeBtn.className = DISLIKE_REGULAR_CL;
+    dislikeCount.innerText = dislikes;
+
+    likeBtn.className = userLikesTarget ? LIKE_SOLID_CL : LIKE_REGULAR_CL;
+    likeCount.innerText = likes;
+  };
+
+  const repaintDislikeBtn = (dislikes, userDislikesTarget, likes) => {
+    likeBtn.className = LIKE_REGULAR_CL;
+    likeCount.innerText = likes;
+
+    dislikeBtn.className = userDislikesTarget
+      ? DISLIKE_SOLID_CL
+      : DISLIKE_REGULAR_CL;
+
+    dislikeCount.innerText = dislikes;
+  };
+
+  const handleLikeClick = async (isLikeHit) => {
+    const response = await fetch(`/api/${targetCategory}/${targetId}/like`, {
+      method: "POST",
+      headers: { "Content-type": "application/json" }, // ⭐️ tell the server what we are going to send
+      //req.body!!
+      body: JSON.stringify({ isLikeHit }),
+    });
+
+    if (response.status === 201) {
+      const { likes, userLikesTarget, dislikes, userDislikesTarget } =
+        await response.json();
+
+      console.log(likes, userLikesTarget, dislikes, userDislikesTarget);
+
+      if (isLikeHit) {
+        repaintLikeBtn(likes, userLikesTarget, dislikes);
+      } else {
+        repaintDislikeBtn(dislikes, userDislikesTarget, likes);
+      }
+    }
+  };
+
+  likeBtn.addEventListener("click", () => handleLikeClick(true));
+  dislikeBtn.addEventListener("click", () => handleLikeClick(false));
+};

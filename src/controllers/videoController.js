@@ -309,14 +309,66 @@ export const deleteComment = async (req, res) => {
   return res.sendStatus(201);
 };
 
-export const likeComment = (req, res) => {};
-
 /// like video helper
-const removeLikeOrDislikeUser = (video, user, likeOrDislike) => {
-  const newLikeUsers = video.meta[likeOrDislike].filter(
+const removeLikeOrDislikeUser = (model, user, likeOrDislike) => {
+  const newLikeUsers = model.meta[likeOrDislike].filter(
     (likeOrDislikeUser) => likeOrDislikeUser + "" !== user._id + ""
   );
-  video.meta[likeOrDislike] = newLikeUsers;
+  model.meta[likeOrDislike] = newLikeUsers;
+};
+
+const likeTargetModel = (res, targetModel, user, isLikeHit) => {
+  /////// capsulate from here
+  const isAlreadyLiked = targetModel.meta.likeUsers.includes(user._id);
+  const isAlreadyDisiked = targetModel.meta.dislikeUsers.includes(user._id);
+
+  if (isLikeHit) {
+    if (isAlreadyLiked) {
+      removeLikeOrDislikeUser(targetModel, user, "likeUsers");
+    } else {
+      if (isAlreadyDisiked) {
+        removeLikeOrDislikeUser(targetModel, user, "dislikeUsers");
+      }
+      targetModel.meta.likeUsers.push(user._id);
+    }
+  } else {
+    if (isAlreadyDisiked) {
+      removeLikeOrDislikeUser(targetModel, user, "dislikeUsers");
+    } else {
+      if (isAlreadyLiked) {
+        removeLikeOrDislikeUser(targetModel, user, "likeUsers");
+      }
+
+      targetModel.meta.dislikeUsers.push(user._id);
+    }
+  }
+
+  targetModel.save();
+
+  return res.status(201).json({
+    likes: targetModel.meta.likeUsers.length,
+    userLikesTarget: targetModel.meta.likeUsers.includes(user._id),
+    dislikes: targetModel.meta.dislikeUsers.length,
+    userDislikesTarget: targetModel.meta.dislikeUsers.includes(user._id),
+  });
+};
+
+export const likeComment = async (req, res) => {
+  const {
+    session: {
+      user: { _id: userId },
+    },
+    body: { isLikeHit },
+    params: { id: commentId },
+  } = req;
+
+  const user = await User.findById(userId);
+  const comment = await Comment.findById(commentId);
+
+  if (!user || !comment) {
+    return res.sendStatus(404);
+  }
+  likeTargetModel(res, comment, user, isLikeHit);
 };
 
 export const likeVideo = async (req, res) => {
@@ -335,36 +387,38 @@ export const likeVideo = async (req, res) => {
     return res.sendStatus(404);
   }
 
-  const isAlreadyLiked = video.meta.likeUsers.includes(user._id);
-  const isAlreadyDisiked = video.meta.dislikeUsers.includes(user._id);
+  likeTargetModel(res, video, user, isLikeHit);
+  // /////// capsulate from here
+  // const isAlreadyLiked = video.meta.likeUsers.includes(user._id);
+  // const isAlreadyDisiked = video.meta.dislikeUsers.includes(user._id);
 
-  if (isLikeHit) {
-    if (isAlreadyLiked) {
-      removeLikeOrDislikeUser(video, user, "likeUsers");
-    } else {
-      if (isAlreadyDisiked) {
-        removeLikeOrDislikeUser(video, user, "dislikeUsers");
-      }
-      video.meta.likeUsers.push(user._id);
-    }
-  } else {
-    if (isAlreadyDisiked) {
-      removeLikeOrDislikeUser(video, user, "dislikeUsers");
-    } else {
-      if (isAlreadyLiked) {
-        removeLikeOrDislikeUser(video, user, "likeUsers");
-      }
+  // if (isLikeHit) {
+  //   if (isAlreadyLiked) {
+  //     removeLikeOrDislikeUser(video, user, "likeUsers");
+  //   } else {
+  //     if (isAlreadyDisiked) {
+  //       removeLikeOrDislikeUser(video, user, "dislikeUsers");
+  //     }
+  //     video.meta.likeUsers.push(user._id);
+  //   }
+  // } else {
+  //   if (isAlreadyDisiked) {
+  //     removeLikeOrDislikeUser(video, user, "dislikeUsers");
+  //   } else {
+  //     if (isAlreadyLiked) {
+  //       removeLikeOrDislikeUser(video, user, "likeUsers");
+  //     }
 
-      video.meta.dislikeUsers.push(user._id);
-    }
-  }
+  //     video.meta.dislikeUsers.push(user._id);
+  //   }
+  // }
 
-  video.save();
+  // video.save();
 
-  return res.status(201).json({
-    likes: video.meta.likeUsers.length,
-    userLikesVideo: video.meta.likeUsers.includes(user._id),
-    dislikes: video.meta.dislikeUsers.length,
-    userDislikesVideo: video.meta.dislikeUsers.includes(user._id),
-  });
+  // return res.status(201).json({
+  //   likes: video.meta.likeUsers.length,
+  //   userLikesTarget: video.meta.likeUsers.includes(user._id),
+  //   dislikes: video.meta.dislikeUsers.length,
+  //   userDislikesTarget: video.meta.dislikeUsers.includes(user._id),
+  // });
 };
