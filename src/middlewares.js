@@ -33,7 +33,6 @@ export const localsMiddleware = (req, res, next) => {
     profile: "Profile",
     related: "Related",
   };
-
   next();
 };
 
