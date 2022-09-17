@@ -72,6 +72,20 @@ export const postLogin = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
+  if (req.session.fbUser) {
+    req.session.fbUser = null;
+    // const { access_token, user_id } = req.session.fbUser;
+    // const fbLogout = await (
+    //   await fetch(
+    //     `https://graph.facebook.com/v15.0/${user_id}/permissions?access_token=${access_token}`,
+    //     {
+    //       method: "DELETE",
+    //     }
+    //   )
+    // ).json();
+    // console.log(fbLogout);
+  }
+
   req.session.user = null;
   req.session.loggedIn = false;
   req.flash("success", "Successfully logged out 👋");
@@ -111,7 +125,20 @@ export const postEdit = async (req, res) => {
   return res.redirect("/user/edit");
 };
 
-export const remove = (req, res) => res.send("remove");
+export const remove = (req, res) => {
+  // if (req.session.fbUser) {
+  //   const { access_token, user_id } = req.session.fbUser;
+  //   const fbLogout = await (
+  //     await fetch(
+  //       `https://graph.facebook.com/v15.0/${user_id}/permissions?access_token=${access_token}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     )
+  //   ).json();
+  //   console.log(fbLogout);
+  // }
+};
 
 export const see = async (req, res) => {
   const { id } = req.params;
@@ -353,7 +380,7 @@ export const finishFbLogin = async (req, res) => {
   if (existingUser) {
     req.session.loggedIn = true;
     req.session.user = existingUser;
-    req.session.user.fbUser = {
+    req.session.fbUser = {
       access_token,
       user_id,
     };
@@ -361,7 +388,7 @@ export const finishFbLogin = async (req, res) => {
   } else {
     const user = await User.create({
       username: name,
-      email: email,
+      email: email || "test@test.test",
       name: name,
       password: "",
       location: "",
@@ -371,6 +398,10 @@ export const finishFbLogin = async (req, res) => {
 
     req.session.loggedIn = true;
     req.session.user = user;
+    req.session.fbUser = {
+      access_token,
+      user_id,
+    };
 
     return res.redirect("/");
   }

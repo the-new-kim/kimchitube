@@ -2,7 +2,7 @@
   "name": "kimchitube",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "init.js",
   "scripts": {
     "start": "node build/init.js",
     "build": "npm run build:server && npm run build:assets",
