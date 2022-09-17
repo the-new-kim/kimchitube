@@ -34,8 +34,6 @@ export const localsMiddleware = (req, res, next) => {
     related: "Related",
   };
 
-  res.locals.fbUser = req.session.fb;
-
   next();
 };
 

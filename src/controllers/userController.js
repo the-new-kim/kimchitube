@@ -1,6 +1,7 @@
 import User from "../models/User";
 import bcrypt from "bcryptjs";
 import fetch from "node-fetch";
+import { redirect } from "next/dist/server/api-utils";
 
 export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "Join" });
@@ -70,7 +71,7 @@ export const postLogin = async (req, res) => {
   return res.redirect("/");
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
   req.session.user = null;
   req.session.loggedIn = false;
   req.flash("success", "Successfully logged out 👋");
@@ -284,34 +285,35 @@ export const startFbLogin = (req, res) => {
   const config = {
     client_id: process.env.FB_APP_ID,
     redirect_uri: process.env.FB_REDIRECT_URI,
-    state: { st: "state2f4rg3", ds: "890678465" },
+    // state: { st: "state2f4rg3", ds: "890678465" },
     // state={"{st=state123abc,ds=123456789}"}
     // display: "popup",
   };
 
   const params = new URLSearchParams(config).toString();
-
   return res.redirect(baseUrl + params);
 };
 
 export const finishFbLogin = async (req, res) => {
-  const {
-    query: { code },
-  } = req;
-
+  ////////1️⃣ GET ACCESS TOKEN
   const accessUrl = "https://graph.facebook.com/v15.0/oauth/access_token?";
   const accessConfig = {
     client_id: process.env.FB_APP_ID,
     redirect_uri: process.env.FB_REDIRECT_URI,
     client_secret: process.env.FB_SECRET,
     // scope:[].join(","),//csv format
-    code,
+    code: req.query.code,
   };
 
   const accessParams = new URLSearchParams(accessConfig).toString();
   const tokenRequest = await (await fetch(accessUrl + accessParams)).json();
   const { access_token } = tokenRequest;
 
+  if (!access_token) {
+    return res.redirect("/login");
+  }
+
+  ////////2️⃣ GET USER ID
   const debugUrl = "https://graph.facebook.com/v15.0/debug_token?";
   const debugConfig = {
     input_token: access_token, // {token-to-inspect}
@@ -321,27 +323,15 @@ export const finishFbLogin = async (req, res) => {
   const debugParams = new URLSearchParams(debugConfig).toString();
   const debugRequest = await (await fetch(debugUrl + debugParams)).json();
 
-  // data: {
-  //   app_id: '5548077801896320',
-  //   type: 'USER',
-  //   application: 'Kimchitube',
-  //   data_access_expires_at: 1671157384,
-  //   expires_at: 1668522398,
-  //   is_valid: true,
-  //   issued_at: 1663338398,
-  //   scopes: [ 'public_profile' ],
-  //   user_id: '5532314350125001'
-  // }
-
-  console.log(
-    "Debug request!!!⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️",
-    debugRequest
-  );
-
   const {
     data: { user_id },
   } = debugRequest;
 
+  if (!user_id) {
+    return res.redirect("/login");
+  }
+
+  ////////3️⃣ GET USER DATA
   const userUrl = `https://graph.facebook.com/v15.0/${user_id}?`;
   const userConfig = {
     fields: ["email", "name", "picture.type(large)"].join(","),
@@ -350,33 +340,41 @@ export const finishFbLogin = async (req, res) => {
   const userParams = new URLSearchParams(userConfig).toString();
   const userData = await (await fetch(userUrl + userParams)).json();
 
-  //   name: 'Kim Hyeongjong',
-  //   picture: {
-  //     data: {
-  //       height: 200,
-  //       is_silhouette: false,
-  //       url: 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5532314350125001&height=200&width=200&ext=1665979593&hash=AeTlABlI0LxvRHAW9Kc',
-  //       width: 200
-  //     }
-  //   },
-  //   id: '5532314350125001'
-  // }
-
-  console.log(
-    "⭐️⭐️⭐️⭐️⭐️⭐️⭐️USER DATA⭐️⭐️⭐️⭐️⭐️⭐️⭐️",
-    userUrl + userParams,
-    userData
-  );
-
-  const { name, email, picture } = userData;
-
-  req.session.fb = {
+  const {
     name,
     email,
-    avatarUrl: picture.data.url,
-  };
+    picture: {
+      data: { url: avatarUrl },
+    },
+  } = userData;
 
-  console.log(req.session.fb);
+  const existingUser = await User.findOne({ email });
 
-  return res.redirect("/");
+  console.log(existingUser);
+
+  if (existingUser) {
+    req.session.loggedIn = true;
+    req.session.user = existingUser;
+    req.session.user.fbUser = {
+      access_token,
+      user_id,
+    };
+    return res.redirect("/");
+  } else {
+    const user = await User.create({
+      username: name,
+      email: email,
+      name: name,
+      password: "",
+      location: "",
+      socialOnly: true,
+      avatarUrl,
+    });
+
+    req.session.loggedIn = true;
+    req.session.user = user;
+
+    console.log("FB USER CREATED!!@!!!!!", req.session.fbUser);
+    return res.redirect("/");
+  }
 };

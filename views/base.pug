@@ -14,11 +14,6 @@ html(lang="en")
         link(rel="stylesheet", href="/static/css/styles.css")
 
     body 
-        if fbUser
-            div=fbUser.name
-            div=fbUser.email 
-            div=fbUser.avatarUrl
-
         if messages.error
             +message("error", messages.error)
         if messages.info
