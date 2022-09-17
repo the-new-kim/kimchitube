@@ -350,8 +350,6 @@ export const finishFbLogin = async (req, res) => {
 
   const existingUser = await User.findOne({ email });
 
-  console.log(existingUser);
-
   if (existingUser) {
     req.session.loggedIn = true;
     req.session.user = existingUser;
@@ -374,7 +372,6 @@ export const finishFbLogin = async (req, res) => {
     req.session.loggedIn = true;
     req.session.user = user;
 
-    console.log("FB USER CREATED!!@!!!!!", req.session.fbUser);
     return res.redirect("/");
   }
 };
