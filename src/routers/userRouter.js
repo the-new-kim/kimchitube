@@ -9,6 +9,10 @@ import {
   see,
   startGithubLogin,
   finishGithubLogin,
+  startGoogleLogin,
+  finishGoogleLogin,
+  startFbLogin,
+  finishFbLogin,
 } from "../controllers/userController";
 import { avatarUpload, protectorMiddleware } from "../middlewares";
 
@@ -33,5 +37,11 @@ userRouter.get("/:id([0-9a-f]{24})", see);
 
 userRouter.get("/github/start-login", startGithubLogin);
 userRouter.get("/github/finish-login", finishGithubLogin);
+
+userRouter.get("/google/start-login", startGoogleLogin);
+userRouter.get("/google/finish-login", finishGoogleLogin);
+
+userRouter.get("/fb/start-login", startFbLogin);
+userRouter.get("/fb/finish-login", finishFbLogin);
 
 export default userRouter;

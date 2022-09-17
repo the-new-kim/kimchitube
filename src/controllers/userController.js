@@ -40,9 +40,11 @@ export const postJoin = async (req, res) => {
   req.flash("success", "Account successfully created 🙌");
   return res.redirect("/");
 };
+
 export const getLogin = (req, res) => {
   return res.render("login", { pageTitle: "Login" });
 };
+
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
@@ -74,6 +76,7 @@ export const logout = (req, res) => {
   req.flash("success", "Successfully logged out 👋");
   return res.redirect("/");
 };
+
 export const getEdit = (req, res) => {
   return res.render("user/edit", { pageTitle: "Edit Profile" });
 };
@@ -108,6 +111,7 @@ export const postEdit = async (req, res) => {
 };
 
 export const remove = (req, res) => res.send("remove");
+
 export const see = async (req, res) => {
   const { id } = req.params;
 
@@ -133,6 +137,7 @@ export const see = async (req, res) => {
 export const getChangePassword = (req, res) => {
   return res.render("change-password", { pageTitle: "Change Password" });
 };
+
 export const postChangePassword = async (req, res) => {
   const {
     session: {
@@ -251,4 +256,127 @@ export const finishGithubLogin = async (req, res) => {
   } else {
     return res.redirect("/login");
   }
+};
+
+export const startGoogleLogin = (req, res) => {
+  const baseUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+
+  const config = {
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+    response_type: "token",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+    ].join(" "),
+  };
+
+  const params = new URLSearchParams(config).toString();
+
+  return res.redirect(`${baseUrl}?${params}`);
+};
+
+export const finishGoogleLogin = async (req, res) => {};
+
+export const startFbLogin = (req, res) => {
+  const baseUrl = "https://www.facebook.com/v15.0/dialog/oauth?";
+
+  const config = {
+    client_id: process.env.FB_APP_ID,
+    redirect_uri: process.env.FB_REDIRECT_URI,
+    state: { st: "state2f4rg3", ds: "890678465" },
+    // state={"{st=state123abc,ds=123456789}"}
+    // display: "popup",
+  };
+
+  const params = new URLSearchParams(config).toString();
+
+  return res.redirect(baseUrl + params);
+};
+
+export const finishFbLogin = async (req, res) => {
+  const {
+    query: { code },
+  } = req;
+
+  const accessUrl = "https://graph.facebook.com/v15.0/oauth/access_token?";
+  const accessConfig = {
+    client_id: process.env.FB_APP_ID,
+    redirect_uri: process.env.FB_REDIRECT_URI,
+    client_secret: process.env.FB_SECRET,
+    // scope:[].join(","),//csv format
+    code,
+  };
+
+  const accessParams = new URLSearchParams(accessConfig).toString();
+  const tokenRequest = await (await fetch(accessUrl + accessParams)).json();
+  const { access_token } = tokenRequest;
+
+  const debugUrl = "https://graph.facebook.com/v15.0/debug_token?";
+  const debugConfig = {
+    input_token: access_token, // {token-to-inspect}
+    access_token: process.env.FB_APP_ID + "|" + process.env.FB_SECRET, // {app-token-or-admin-token} WTF...
+  };
+
+  const debugParams = new URLSearchParams(debugConfig).toString();
+  const debugRequest = await (await fetch(debugUrl + debugParams)).json();
+
+  // data: {
+  //   app_id: '5548077801896320',
+  //   type: 'USER',
+  //   application: 'Kimchitube',
+  //   data_access_expires_at: 1671157384,
+  //   expires_at: 1668522398,
+  //   is_valid: true,
+  //   issued_at: 1663338398,
+  //   scopes: [ 'public_profile' ],
+  //   user_id: '5532314350125001'
+  // }
+
+  console.log(
+    "Debug request!!!⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️",
+    debugRequest
+  );
+
+  const {
+    data: { user_id },
+  } = debugRequest;
+
+  const userUrl = `https://graph.facebook.com/v15.0/${user_id}?`;
+  const userConfig = {
+    fields: ["email", "name", "picture.type(large)"].join(","),
+    access_token,
+  };
+  const userParams = new URLSearchParams(userConfig).toString();
+  const userData = await (await fetch(userUrl + userParams)).json();
+
+  //   name: 'Kim Hyeongjong',
+  //   picture: {
+  //     data: {
+  //       height: 200,
+  //       is_silhouette: false,
+  //       url: 'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5532314350125001&height=200&width=200&ext=1665979593&hash=AeTlABlI0LxvRHAW9Kc',
+  //       width: 200
+  //     }
+  //   },
+  //   id: '5532314350125001'
+  // }
+
+  console.log(
+    "⭐️⭐️⭐️⭐️⭐️⭐️⭐️USER DATA⭐️⭐️⭐️⭐️⭐️⭐️⭐️",
+    userUrl + userParams,
+    userData
+  );
+
+  const { name, email, picture } = userData;
+
+  req.session.fb = {
+    name,
+    email,
+    avatarUrl: picture.data.url,
+  };
+
+  console.log(req.session.fb);
+
+  return res.redirect("/");
 };

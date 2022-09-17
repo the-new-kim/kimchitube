@@ -310,7 +310,7 @@ export const deleteComment = async (req, res) => {
 };
 
 /// like video helper
-const removeLikeOrDislikeUser = (model, user, likeOrDislike) => {
+const removeLikeUser = (model, user, likeOrDislike) => {
   const newLikeUsers = model.meta[likeOrDislike].filter(
     (likeOrDislikeUser) => likeOrDislikeUser + "" !== user._id + ""
   );
@@ -324,19 +324,19 @@ const likeTargetModel = (res, targetModel, user, isLikeHit) => {
 
   if (isLikeHit) {
     if (isAlreadyLiked) {
-      removeLikeOrDislikeUser(targetModel, user, "likeUsers");
+      removeLikeUser(targetModel, user, "likeUsers");
     } else {
       if (isAlreadyDisiked) {
-        removeLikeOrDislikeUser(targetModel, user, "dislikeUsers");
+        removeLikeUser(targetModel, user, "dislikeUsers");
       }
       targetModel.meta.likeUsers.push(user._id);
     }
   } else {
     if (isAlreadyDisiked) {
-      removeLikeOrDislikeUser(targetModel, user, "dislikeUsers");
+      removeLikeUser(targetModel, user, "dislikeUsers");
     } else {
       if (isAlreadyLiked) {
-        removeLikeOrDislikeUser(targetModel, user, "likeUsers");
+        removeLikeUser(targetModel, user, "likeUsers");
       }
 
       targetModel.meta.dislikeUsers.push(user._id);
@@ -380,6 +380,8 @@ export const likeVideo = async (req, res) => {
     params: { id: videoId },
   } = req;
 
+  console.log("hihi");
+
   const user = await User.findById(userId);
   const video = await Video.findById(videoId);
 
@@ -394,19 +396,19 @@ export const likeVideo = async (req, res) => {
 
   // if (isLikeHit) {
   //   if (isAlreadyLiked) {
-  //     removeLikeOrDislikeUser(video, user, "likeUsers");
+  //     removeLikeUser(video, user, "likeUsers");
   //   } else {
   //     if (isAlreadyDisiked) {
-  //       removeLikeOrDislikeUser(video, user, "dislikeUsers");
+  //       removeLikeUser(video, user, "dislikeUsers");
   //     }
   //     video.meta.likeUsers.push(user._id);
   //   }
   // } else {
   //   if (isAlreadyDisiked) {
-  //     removeLikeOrDislikeUser(video, user, "dislikeUsers");
+  //     removeLikeUser(video, user, "dislikeUsers");
   //   } else {
   //     if (isAlreadyLiked) {
-  //       removeLikeOrDislikeUser(video, user, "likeUsers");
+  //       removeLikeUser(video, user, "likeUsers");
   //     }
 
   //     video.meta.dislikeUsers.push(user._id);
