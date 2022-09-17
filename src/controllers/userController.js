@@ -72,19 +72,19 @@ export const postLogin = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  if (req.session.fbUser) {
-    req.session.fbUser = null;
-    // const { access_token, user_id } = req.session.fbUser;
-    // const fbLogout = await (
-    //   await fetch(
-    //     `https://graph.facebook.com/v15.0/${user_id}/permissions?access_token=${access_token}`,
-    //     {
-    //       method: "DELETE",
-    //     }
-    //   )
-    // ).json();
-    // console.log(fbLogout);
-  }
+  // if (req.session.fbUser) {
+  //   req.session.fbUser = null;
+  //   // const { access_token, user_id } = req.session.fbUser;
+  //   // const fbLogout = await (
+  //   //   await fetch(
+  //   //     `https://graph.facebook.com/v15.0/${user_id}/permissions?access_token=${access_token}`,
+  //   //     {
+  //   //       method: "DELETE",
+  //   //     }
+  //   //   )
+  //   // ).json();
+  //   // console.log(fbLogout);
+  // }
 
   req.session.user = null;
   req.session.loggedIn = false;
@@ -125,20 +125,20 @@ export const postEdit = async (req, res) => {
   return res.redirect("/user/edit");
 };
 
-export const remove = (req, res) => {
-  // if (req.session.fbUser) {
-  //   const { access_token, user_id } = req.session.fbUser;
-  //   const fbLogout = await (
-  //     await fetch(
-  //       `https://graph.facebook.com/v15.0/${user_id}/permissions?access_token=${access_token}`,
-  //       {
-  //         method: "DELETE",
-  //       }
-  //     )
-  //   ).json();
-  //   console.log(fbLogout);
-  // }
-};
+// export const remove = (req, res) => {
+//   // if (req.session.fbUser) {
+//   //   const { access_token, user_id } = req.session.fbUser;
+//   //   const fbLogout = await (
+//   //     await fetch(
+//   //       `https://graph.facebook.com/v15.0/${user_id}/permissions?access_token=${access_token}`,
+//   //       {
+//   //         method: "DELETE",
+//   //       }
+//   //     )
+//   //   ).json();
+//   //   console.log(fbLogout);
+//   // }
+// };
 
 export const see = async (req, res) => {
   const { id } = req.params;
@@ -286,123 +286,123 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
-export const startGoogleLogin = (req, res) => {
-  const baseUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+// export const startGoogleLogin = (req, res) => {
+//   const baseUrl = "https://accounts.google.com/o/oauth2/v2/auth";
 
-  const config = {
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
-    response_type: "token",
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/userinfo.profile",
-    ].join(" "),
-  };
+//   const config = {
+//     client_id: process.env.GOOGLE_CLIENT_ID,
+//     redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+//     response_type: "token",
+//     scope: [
+//       "https://www.googleapis.com/auth/userinfo.email",
+//       "https://www.googleapis.com/auth/userinfo.profile",
+//     ].join(" "),
+//   };
 
-  const params = new URLSearchParams(config).toString();
+//   const params = new URLSearchParams(config).toString();
 
-  return res.redirect(`${baseUrl}?${params}`);
-};
+//   return res.redirect(`${baseUrl}?${params}`);
+// };
 
-export const finishGoogleLogin = async (req, res) => {};
+// export const finishGoogleLogin = async (req, res) => {};
 
-export const startFbLogin = (req, res) => {
-  const baseUrl = "https://www.facebook.com/v15.0/dialog/oauth?";
+// export const startFbLogin = (req, res) => {
+//   const baseUrl = "https://www.facebook.com/v15.0/dialog/oauth?";
 
-  const config = {
-    client_id: process.env.FB_APP_ID,
-    redirect_uri: process.env.FB_REDIRECT_URI,
-    // state: { st: "state2f4rg3", ds: "890678465" },
-    // state={"{st=state123abc,ds=123456789}"}
-    // display: "popup",
-  };
+//   const config = {
+//     client_id: process.env.FB_APP_ID,
+//     redirect_uri: process.env.FB_REDIRECT_URI,
+//     // state: { st: "state2f4rg3", ds: "890678465" },
+//     // state={"{st=state123abc,ds=123456789}"}
+//     // display: "popup",
+//   };
 
-  const params = new URLSearchParams(config).toString();
-  return res.redirect(baseUrl + params);
-};
+//   const params = new URLSearchParams(config).toString();
+//   return res.redirect(baseUrl + params);
+// };
 
-export const finishFbLogin = async (req, res) => {
-  ////////1️⃣ GET ACCESS TOKEN
-  const accessUrl = "https://graph.facebook.com/v15.0/oauth/access_token?";
-  const accessConfig = {
-    client_id: process.env.FB_APP_ID,
-    redirect_uri: process.env.FB_REDIRECT_URI,
-    client_secret: process.env.FB_SECRET,
-    // scope:[].join(","),//csv format
-    code: req.query.code,
-  };
+// export const finishFbLogin = async (req, res) => {
+//   ////////1️⃣ GET ACCESS TOKEN
+//   const accessUrl = "https://graph.facebook.com/v15.0/oauth/access_token?";
+//   const accessConfig = {
+//     client_id: process.env.FB_APP_ID,
+//     redirect_uri: process.env.FB_REDIRECT_URI,
+//     client_secret: process.env.FB_SECRET,
+//     // scope:[].join(","),//csv format
+//     code: req.query.code,
+//   };
 
-  const accessParams = new URLSearchParams(accessConfig).toString();
-  const tokenRequest = await (await fetch(accessUrl + accessParams)).json();
-  const { access_token } = tokenRequest;
+//   const accessParams = new URLSearchParams(accessConfig).toString();
+//   const tokenRequest = await (await fetch(accessUrl + accessParams)).json();
+//   const { access_token } = tokenRequest;
 
-  if (!access_token) {
-    return res.redirect("/login");
-  }
+//   if (!access_token) {
+//     return res.redirect("/login");
+//   }
 
-  ////////2️⃣ GET USER ID
-  const debugUrl = "https://graph.facebook.com/v15.0/debug_token?";
-  const debugConfig = {
-    input_token: access_token, // {token-to-inspect}
-    access_token: process.env.FB_APP_ID + "|" + process.env.FB_SECRET, // {app-token-or-admin-token} WTF...
-  };
+//   ////////2️⃣ GET USER ID
+//   const debugUrl = "https://graph.facebook.com/v15.0/debug_token?";
+//   const debugConfig = {
+//     input_token: access_token, // {token-to-inspect}
+//     access_token: process.env.FB_APP_ID + "|" + process.env.FB_SECRET, // {app-token-or-admin-token} WTF...
+//   };
 
-  const debugParams = new URLSearchParams(debugConfig).toString();
-  const debugRequest = await (await fetch(debugUrl + debugParams)).json();
+//   const debugParams = new URLSearchParams(debugConfig).toString();
+//   const debugRequest = await (await fetch(debugUrl + debugParams)).json();
 
-  const {
-    data: { user_id },
-  } = debugRequest;
+//   const {
+//     data: { user_id },
+//   } = debugRequest;
 
-  if (!user_id) {
-    return res.redirect("/login");
-  }
+//   if (!user_id) {
+//     return res.redirect("/login");
+//   }
 
-  ////////3️⃣ GET USER DATA
-  const userUrl = `https://graph.facebook.com/v15.0/${user_id}?`;
-  const userConfig = {
-    fields: ["email", "name", "picture.type(large)"].join(","),
-    access_token,
-  };
-  const userParams = new URLSearchParams(userConfig).toString();
-  const userData = await (await fetch(userUrl + userParams)).json();
+//   ////////3️⃣ GET USER DATA
+//   const userUrl = `https://graph.facebook.com/v15.0/${user_id}?`;
+//   const userConfig = {
+//     fields: ["email", "name", "picture.type(large)"].join(","),
+//     access_token,
+//   };
+//   const userParams = new URLSearchParams(userConfig).toString();
+//   const userData = await (await fetch(userUrl + userParams)).json();
 
-  const {
-    name,
-    email,
-    picture: {
-      data: { url: avatarUrl },
-    },
-  } = userData;
+//   const {
+//     name,
+//     email,
+//     picture: {
+//       data: { url: avatarUrl },
+//     },
+//   } = userData;
 
-  const existingUser = await User.findOne({ email });
+//   const existingUser = await User.findOne({ email });
 
-  if (existingUser) {
-    req.session.loggedIn = true;
-    req.session.user = existingUser;
-    req.session.fbUser = {
-      access_token,
-      user_id,
-    };
-    return res.redirect("/");
-  } else {
-    const user = await User.create({
-      username: name,
-      email: email || "test@test.test",
-      name: name,
-      password: "",
-      location: "",
-      socialOnly: true,
-      avatarUrl,
-    });
+//   if (existingUser) {
+//     req.session.loggedIn = true;
+//     req.session.user = existingUser;
+//     req.session.fbUser = {
+//       access_token,
+//       user_id,
+//     };
+//     return res.redirect("/");
+//   } else {
+//     const user = await User.create({
+//       username: name,
+//       email: email || "test@test.test",
+//       name: name,
+//       password: "",
+//       location: "",
+//       socialOnly: true,
+//       avatarUrl,
+//     });
 
-    req.session.loggedIn = true;
-    req.session.user = user;
-    req.session.fbUser = {
-      access_token,
-      user_id,
-    };
+//     req.session.loggedIn = true;
+//     req.session.user = user;
+//     req.session.fbUser = {
+//       access_token,
+//       user_id,
+//     };
 
-    return res.redirect("/");
-  }
-};
+//     return res.redirect("/");
+//   }
+// };
