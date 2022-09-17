@@ -30,7 +30,8 @@ userRouter
   .get(getChangePassword)
   .post(postChangePassword);
 
-userRouter.get("/remove", protectorMiddleware, remove);
+// userRouter.get("/remove", protectorMiddleware, remove);
+
 // REGEX Number
 // userRouter.get("/:id(\\d+)", see);
 userRouter.get("/:id([0-9a-f]{24})", see);
@@ -38,10 +39,10 @@ userRouter.get("/:id([0-9a-f]{24})", see);
 userRouter.get("/github/start-login", startGithubLogin);
 userRouter.get("/github/finish-login", finishGithubLogin);
 
-userRouter.get("/google/start-login", startGoogleLogin);
-userRouter.get("/google/finish-login", finishGoogleLogin);
+// userRouter.get("/google/start-login", startGoogleLogin);
+// userRouter.get("/google/finish-login", finishGoogleLogin);
 
-userRouter.get("/fb/start-login", startFbLogin);
-userRouter.get("/fb/finish-login", finishFbLogin);
+// userRouter.get("/fb/start-login", startFbLogin);
+// userRouter.get("/fb/finish-login", finishFbLogin);
 
 export default userRouter;
