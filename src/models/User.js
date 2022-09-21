@@ -3,6 +3,10 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
   avatarUrl: String,
+  avatar: {
+    url: String,
+    isFromSocial: Boolean,
+  },
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String },
@@ -23,20 +27,7 @@ const userSchema = new mongoose.Schema({
       ref: "Video",
     },
   ],
-  // likeVideos: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     required: true,
-  //     ref: "Video",
-  //   },
-  // ],
-  // dislikeVideos: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     required: true,
-  //     ref: "Video",
-  //   },
-  // ],
+
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,

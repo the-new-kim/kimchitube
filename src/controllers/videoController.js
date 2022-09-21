@@ -380,8 +380,6 @@ export const likeVideo = async (req, res) => {
     params: { id: videoId },
   } = req;
 
-  console.log("hihi");
-
   const user = await User.findById(userId);
   const video = await Video.findById(videoId);
 

@@ -1,4 +1,4 @@
-import { initLike } from "./utils";
+import { likeContent } from "./utils";
 
 const videoPlayer = document.getElementById("videoPlayer");
 const form = document.getElementById("commentForm");
@@ -102,7 +102,7 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   currentCommentsTotal += 1;
   repaintCommentsTotal();
 
-  initLike(buttonContainer, "comment", commentId);
+  likeContent(buttonContainer, "comment", commentId);
   deleteButton.addEventListener("click", handleCommentDelete);
 };
 

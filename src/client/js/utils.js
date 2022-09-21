@@ -24,7 +24,7 @@ export const openNav = (btn, menu) => {
   document.body.addEventListener("click", handleClick);
 };
 
-export const initLike = (container, targetCategory, targetId) => {
+export const likeContent = (container, targetCategory, targetId) => {
   const likeBtn = container.querySelector(".likeBtn");
   const dislikeBtn = container.querySelector(".dislikeBtn");
   const likeCount = container.querySelector(".likeCount");
@@ -66,8 +66,6 @@ export const initLike = (container, targetCategory, targetId) => {
     if (response.status === 201) {
       const { likes, userLikesTarget, dislikes, userDislikesTarget } =
         await response.json();
-
-      console.log(likes, userLikesTarget, dislikes, userDislikesTarget);
 
       if (isLikeHit) {
         repaintLikeBtn(likes, userLikesTarget, dislikes);

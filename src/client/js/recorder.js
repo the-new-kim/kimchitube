@@ -126,7 +126,6 @@ const handleStop = () => {
   recorder.stop();
   clearInterval(timeStampId);
   timeStampId = null;
-  console.log(timeStampId);
 };
 
 const handleStart = () => {
