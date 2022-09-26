@@ -1,7 +1,9 @@
 include ../mixins/avatar
 
 header
-    a.header__logo(href="/")=siteTitle
+    a.header__logo(href="/")
+        span.site-logo Kimchi
+        span.site-title Tube
     
     div.header__search
         form(method="GET" action="/search").search__form.searchForm
