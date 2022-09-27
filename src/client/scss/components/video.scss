@@ -3,11 +3,11 @@
 .video-mixin,
 .video-mixin-profile,
 .video-mixin-related {
-  img {
+  .video-mixin__thumb img {
     transition: transform ease-out 300ms;
   }
   &:hover {
-    img {
+    .video-mixin__thumb img {
       transform: scale(1.1);
     }
   }
@@ -15,13 +15,12 @@
 
 .video-mixin {
   .video-mixin__thumb {
-    // height: 150px;
     aspect-ratio: 1.77/1;
-    border-radius: 7px;
+    border-radius: $video-border-radius;
     width: 100%;
     background-color: ivory;
     overflow: hidden;
-
+    box-shadow: $box-shadow;
     img {
       width: 100%;
       height: 100%;
@@ -31,7 +30,7 @@
 
   .video-mixin__data {
     // padding: 0px 15px;
-    margin-top: 10px;
+    margin-top: 15px;
     display: flex;
 
     .video-mixin__data__left {
@@ -54,27 +53,27 @@
 
 // video mixin
 .video-mixin-profile {
-  .video-mixin-profile__thumb {
-    // height: 150px;
+  .video-mixin__thumb {
     aspect-ratio: 1.77/1;
     border-radius: 7px;
     width: 100%;
     background-color: ivory;
     overflow: hidden;
+    box-shadow: $box-shadow;
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
-  .video-mixin-profile__data {
-    margin-top: 10px;
+  .video-mixin__data {
+    margin-top: 15px;
 
-    .video-mixin-profile__title {
+    .video-mixin__title {
       font-size: 18px;
       display: block;
     }
-    .video-mixin-profile__meta {
+    .video-mixin__meta {
       margin-top: 5px;
       font-size: 12px;
     }
@@ -84,29 +83,31 @@
 .video-mixin-related {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
   > * {
     flex-basis: 50%;
   }
-  .video-mixin-related__thumb {
+  .video-mixin__thumb {
     // height: 150px;
     aspect-ratio: 1.77/1;
-    border-radius: 7px;
+    border-radius: $video-border-radius;
     width: 100%;
     background-color: ivory;
     overflow: hidden;
+    box-shadow: $box-shadow;
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
-  .video-mixin-related__data {
+  .video-mixin__data {
     padding-left: 10px;
-    .video-mixin-related__title {
+    .video-mixin__title {
       font-size: 18px;
       display: block;
     }
-    .video-mixin-related__meta {
+    .video-mixin__meta {
       margin-top: 5px;
       font-size: 12px;
     }

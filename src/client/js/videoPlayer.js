@@ -18,6 +18,12 @@ video.volume = volumeValue;
 let controlsTimeout = null;
 let controlsMovementTimeout = null;
 
+const paintTrack = (rangeInput, inputValue) => {
+  rangeInput.style.background = `linear-gradient(to right, #26a1ed 0%, #26a1ed ${
+    (inputValue / rangeInput.max) * 100
+  }%, white ${(inputValue / rangeInput.max) * 100}%, white 100%)`;
+};
+
 const handlePlayClick = () => {
   if (video.paused) {
     video.play();
@@ -33,10 +39,13 @@ const handleMuteClick = () => {
   } else {
     video.muted = true;
   }
+
   muteBtnIcon.classList = video.muted
     ? "fas fa-volume-mute"
     : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue;
+
+  paintTrack(volumeRange, volumeRange.value);
 };
 
 const handleVolume = (event) => {
@@ -45,6 +54,8 @@ const handleVolume = (event) => {
   } = event;
   volumeValue = value;
   video.volume = value;
+
+  paintTrack(volumeRange, value);
 };
 
 // Time format trick
@@ -57,11 +68,15 @@ const formatTime = (seconds) =>
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
   timeline.max = Math.floor(video.duration);
+
+  paintTrack(timeline, timeline.value);
+  paintTrack(volumeRange, volumeRange.value);
 };
 
 const handleTimeUpdate = () => {
   currentTime.innerText = formatTime(Math.floor(video.currentTime));
   timeline.value = Math.floor(video.currentTime);
+  paintTrack(timeline, timeline.value);
 };
 
 const handleTimelineChange = (event) => {
@@ -69,6 +84,8 @@ const handleTimelineChange = (event) => {
     target: { value },
   } = event;
   video.currentTime = value;
+
+  paintTrack(timeline, value);
 };
 
 const handleFullScreen = () => {

@@ -4,7 +4,7 @@
     opacity: 1;
   }
   to {
-    transform: translateY(-50px);
+    transform: translateY(50px);
     opacity: 0;
   }
 }
@@ -12,26 +12,36 @@
 .message {
   z-index: 100;
   position: absolute;
-  top: 10px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  max-width: 200px;
-  padding: 10px 20px;
-  border-radius: 10000px;
+  bottom: 30px;
+  right: 30px;
+  padding: 20px 30px;
+  border-radius: 20px;
   text-align: center;
   animation: goAway 0.5s ease-in-out forwards;
   animation-delay: 5s;
+  border: solid 1px $color-smokey-black;
   &.error {
-    background-color: tomato;
-    color: white;
+    &::before {
+      content: "😵 ";
+    }
+
+    background-color: $color-metallic-bronze;
+    color: $color-bone;
   }
   &.success {
-    background-color: darkcyan;
-    color: white;
+    &::before {
+      content: "😊 ";
+    }
+
+    background-color: $color-green-cyan;
+    color: $color-bone;
   }
   &.info {
-    background-color: wheat;
-    color: black;
+    &::before {
+      content: "🤓 ";
+    }
+
+    background-color: $color-copper-peny;
+    color: $color-bone;
   }
 }

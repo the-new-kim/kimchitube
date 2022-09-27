@@ -31,34 +31,35 @@ block body
             //- hr
 
             div.video__data
-                ul.video__hash-tags
-                    each tag in video.hashtags
-                        li
-                            a(href=`/search?keyword=${tag.replace("#","")}`)=tag
-                p.video__title=video.title
-                div.video__meta-and-likes
-                    small.video__meta
-                        span #{video.meta.views} #{video.meta.views > 1 ? "Views " : "View "}
-                        span · 
-                        span=new Date(video.createdAt).toLocaleDateString("us-en", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+                .video__data__top
+                    ul.video__hash-tags
+                        each tag in video.hashtags
+                            li
+                                a(href=`/search?keyword=${tag.replace("#","")}`)=tag
+                    p.video__title=video.title
+                    div.video__meta-and-likes
+                        small.video__meta
+                            span #{video.meta.views} #{video.meta.views > 1 ? "Views " : "View "}
+                            span · 
+                            span=new Date(video.createdAt).toLocaleDateString("us-en", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
 
-                    span.video__likes.videoLikesContainer
-                        +like(video)
+                        span.video__likes.videoLikesContainer
+                            +like(video)
                 hr
-
-                .video__owner-and-description
-                    a(href=`/user/${video.owner._id}`).video__owner-avatar
-                        div.avatar.avatar__sm
-                            +avatar(video.owner)
-                    h3.video__owner-name
-                        a(href=`/user/${video.owner._id}`)=video.owner.name
-                    p.video__desciprtion=video.description
-                
-                
-                if loggedIn && video.owner._id + "" === loggedInUser._id + ""
-                    div.video__admin
-                        a(href=`${video.id}/edit`) Edit
-                        a(href=`${video.id}/delete`) Delete    
+                .video__data__bottom
+                    .video__owner-and-description
+                        a(href=`/user/${video.owner._id}`).video__owner-avatar
+                            div.avatar.avatar__sm
+                                +avatar(video.owner)
+                        h3.video__owner-name
+                            a(href=`/user/${video.owner._id}`)=video.owner.name
+                        p.video__desciprtion=video.description
+                    
+                    
+                    if loggedIn && video.owner._id + "" === loggedInUser._id + ""
+                        div.video__admin
+                            a(href=`${video.id}/edit`) Edit
+                            a(href=`${video.id}/delete`) Delete    
             
             
             

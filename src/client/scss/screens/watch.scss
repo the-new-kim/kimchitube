@@ -8,98 +8,117 @@
     & > *:not(:first-child) {
       margin-top: 40px;
     }
+
+    video {
+      border-radius: $video-border-radius;
+      box-shadow: $box-shadow;
+    }
   }
 
   .related-videos {
     max-width: 400px;
     padding-left: 20px;
-    > * {
-      margin-bottom: 10px;
-    }
   }
 }
 
 .video__data {
   display: flex;
   flex-direction: column;
-  & > * {
-    margin-bottom: 5px;
-  }
+
+  padding: 20px;
+  background-color: $color-bone;
+  border-radius: 20px;
+  border: solid 1px $color-smokey-black;
+  color: $color-smokey-black-light;
+  box-shadow: $box-shadow;
+
   hr {
-    display: block;
+    width: 100%;
     height: 1px;
-    border: 0;
-    border-top: 1px solid $border-gray;
-    margin: 1em 0;
+    background: $color-smokey-black;
+    border: none;
   }
-  .video__hash-tags {
-    display: flex;
+  & > * {
+    margin-bottom: 20px;
+  }
 
-    & > li {
-      color: $link-blue;
-      &:not(:first-child) {
-        margin-left: 5px;
+  .video__data__top {
+    .video__hash-tags {
+      display: flex;
+      margin-bottom: 10px;
+      & > li {
+        color: $tag-color;
+        &:not(:first-child) {
+          margin-left: 5px;
+        }
+      }
+    }
+    .video__title {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+    .video__meta-and-likes {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .video__meta {
+        font-size: 12px;
+        // color: ;
+      }
+      .video__likes {
+        > * {
+          margin-right: 10px;
+        }
+        i {
+          cursor: pointer;
+
+          font-size: 20px;
+        }
       }
     }
   }
-  .video__title {
-    font-size: 26px;
-    margin-bottom: 10px;
-  }
-  .video__meta-and-likes {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .video__meta {
-      font-size: 12px;
-      color: gainsboro;
-    }
-    .video__likes {
-      > * {
-        margin-right: 10px;
-      }
-      i {
-        cursor: pointer;
+  .video__data__bottom {
+    .video__owner-and-description {
+      display: grid;
+      grid-template-areas:
+        "avatar name"
+        ". description";
+      grid-template-columns: auto 1fr;
+      gap: 10px;
 
+      .video__owner-avatar {
+        grid-area: avatar;
+      }
+
+      .video__owner-name {
+        grid-area: name;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
         font-size: 20px;
       }
-    }
-  }
 
-  .video__owner-and-description {
-    display: grid;
-    grid-template-areas:
-      "avatar name"
-      ". description";
-    grid-template-columns: auto 1fr;
-    gap: 10px;
-
-    .video__owner-avatar {
-      grid-area: avatar;
+      .video__desciprtion {
+        grid-area: description;
+      }
     }
 
-    .video__owner-name {
-      grid-area: name;
+    .video__admin {
       display: flex;
-      justify-content: flex-start;
+      justify-content: flex-end;
       align-items: center;
-      font-size: 20px;
-    }
-
-    .video__desciprtion {
-      grid-area: description;
-    }
-  }
-
-  .video__admin {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    a {
-      margin: 5px;
-      padding: 15px 20px;
-      border-radius: 5px;
-      border: 1px solid $border-gray;
+      a {
+        margin: 5px;
+        padding: 15px 20px;
+        border-radius: 20px;
+        border: 1px solid $color-smokey-black-light;
+        background-color: white;
+        transition: color 300ms ease-out, border 300ms ease-out;
+        &:hover {
+          color: $color-button-blue;
+          border: 1px solid $color-button-blue;
+        }
+      }
     }
   }
 }
@@ -122,11 +141,13 @@
       background: transparent;
       border: 0;
       border-radius: 0;
-      border-bottom: 1px solid $border-gray;
+      border-bottom: 1px solid $color-bone;
       margin-bottom: 5px;
       font-size: 20px;
       color: white;
-
+      &::placeholder {
+        color: $color-bone;
+      }
       &:focus {
         border-color: white;
       }
@@ -138,10 +159,13 @@
       visibility: hidden;
       margin: 5px;
       padding: 15px 20px;
-      border-radius: 5px;
-      border: 1px solid $border-gray;
+      border-radius: 20px;
+      background-color: $color-bone;
+      border: 1px solid $color-smokey-black;
+      color: $color-smokey-black-light;
       cursor: pointer;
       transition: opacity ease-out 300ms, visibility ease-out 300ms;
+      box-shadow: $box-shadow;
     }
 
     &:focus-within {

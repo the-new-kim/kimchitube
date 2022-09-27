@@ -1,9 +1,10 @@
 include ../mixins/avatar
 
 header
-    a.header__logo(href="/")
-        span.site-logo Kimchi
-        span.site-title Tube
+    .header__logo
+        a(href="/")
+            span.site-logo Kimchi
+            span.site-title Tube
     
     div.header__search
         form(method="GET" action="/search").search__form.searchForm
@@ -24,7 +25,6 @@ header
                     a(href="/user/edit") Edit Profile
                 li 
                     a(href="/user/logout") Logout
-
         else
             a(href="/login") Login 
             

@@ -1,5 +1,43 @@
-$red: #cc0d00;
-$bg-dark: #0e1117;
-$link-blue: cornflowerblue;
-$border-gray: #004c3f;
-$border-gray-light: #696969;
+//Colors
+//Primary
+$color-bone-light: hsl(39, 32%, 90%);
+$color-bone: hsl(39, 32%, 84%);
+$color-bone-dark: hsl(38, 32%, 67%);
+$color-bone-darker: hsl(38, 32%, 42%);
+
+$color-silver: hsl(0, 0%, 75%);
+
+//Intermediately Related
+$color-button-blue: rgb(38, 161, 237);
+$color-steel-teal: hsl(181, 19%, 46%);
+$color-metallic-bronze: hsl(27, 44%, 46%);
+$color-copper-peny: hsl(5, 29%, 55%);
+$color-green-cyan: hsl(160, 100%, 30%);
+
+//Distantly Related
+$color-smokey-black-light: hsl(30, 33%, 18%);
+$color-smokey-black: hsl(30, 33%, 5%);
+$color-dark-navy: hsl(237, 96%, 19%);
+
+$bg-color: $color-bone-dark;
+$tag-color: $color-button-blue;
+
+//Form
+// $form-bg-color: $color-bone;
+// $input-bg-color: $color-green-cyan;
+// $submit-bg-color: $color-steel-teal;
+// $border-color: $color-smokey-black;
+
+//Video
+$video-border-radius: 15px;
+$box-shadow: 5px 5px 15px rgb(0 0 0 / 30%);
+
+//input[type="range"]
+$thumb-size: 20px;
+$thumb-border: solid 1px $color-smokey-black-light;
+$thumb-border-radius: 50%;
+$thumb-background: white;
+
+$track-height: 10px;
+$track-background: white;
+$track-border: solid 1px $color-smokey-black-light;

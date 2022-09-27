@@ -6,13 +6,16 @@
     width: 100%;
   }
   .videoControls {
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.5s ease-in-out;
     &.showing {
       opacity: 1;
     }
+    color: $color-smokey-black-light;
+    box-shadow: $box-shadow;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 15px;
+    border: solid 1px $color-smokey-black;
     position: absolute;
     bottom: 10px;
     width: 95%;
@@ -23,14 +26,47 @@
     grid-template-columns: 1fr 4fr 1fr auto;
     gap: 10px;
     justify-content: space-between;
-    background-color: #0f1117;
+    background-color: $color-bone;
     padding: 10px;
     left: 0;
     box-sizing: border-box;
+
+    input[type="range"] {
+      all: unset;
+      background: $track-background;
+      height: $track-height;
+      border-radius: 20px;
+      border: $track-border;
+
+      /***** Thumb Styles *****/
+      /***** Chrome, Safari, Opera, and Edge Chromium *****/
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+
+        background-color: $thumb-background;
+        height: $thumb-size;
+        width: $thumb-size;
+        border-radius: $thumb-border-radius;
+        border: $thumb-border;
+        cursor: pointer;
+      }
+
+      /***** Firefox *****/
+      &::-moz-range-thumb {
+        border: $thumb-border;
+        border-radius: $thumb-border-radius;
+        background-color: $thumb-background;
+        height: $thumb-size;
+        width: $thumb-size;
+        cursor: pointer;
+      }
+    }
+
     .videoControls__play {
       display: flex;
       align-items: center;
-      justify-content: space-around;
+      justify-content: flex-start;
       .videoControls__playBtn {
         margin: 0px 15px;
       }
@@ -46,6 +82,14 @@
         i {
           font-size: 20px;
         }
+      }
+    }
+
+    i {
+      cursor: pointer;
+      transition: color 300ms ease-out;
+      &:hover {
+        color: $color-button-blue;
       }
     }
   }

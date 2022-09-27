@@ -3,4 +3,5 @@ mixin avatar(avatarOwner)
         img(src=isHeroku || avatarOwner.socialOnly ? avatarOwner.avatarUrl : "/" + avatarOwner.avatarUrl, crossorigin)
     else
         div.empty__avatar=avatarOwner.name[0]
+
         

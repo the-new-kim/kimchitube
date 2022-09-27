@@ -36,7 +36,7 @@ export const postJoin = async (req, res) => {
   req.session.loggedIn = true;
   req.session.user = user;
 
-  req.flash("success", "Account successfully created 🙌");
+  req.flash("success", `Welcome ${username}`);
   return res.redirect("/");
 };
 
@@ -65,7 +65,7 @@ export const postLogin = async (req, res) => {
   req.session.loggedIn = true;
   req.session.user = user;
 
-  req.flash("success", `Hello ${username} 👋`);
+  req.flash("success", `Hello ${username}`);
   return res.redirect("/");
 };
 
@@ -86,7 +86,7 @@ export const logout = async (req, res) => {
 
   req.session.user = null;
   req.session.loggedIn = false;
-  req.flash("success", "Successfully logged out 👋");
+  req.flash("success", "Bye");
   return res.redirect("/");
 };
 
@@ -119,7 +119,7 @@ export const postEdit = async (req, res) => {
   );
 
   req.session.user = updatedUser;
-  req.flash("success", "User updated 😎");
+  req.flash("success", "Saved!");
   return res.redirect("/user/edit");
 };
 
