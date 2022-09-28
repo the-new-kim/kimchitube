@@ -1,9 +1,9 @@
 import "../scss/styles.scss";
-import { openNav } from "./utils";
+import { toggleShowing } from "./utils";
 
 const userNavBtn = document.querySelector(".userNavBtn");
 const userNavMenu = document.querySelector(".userNavMenu");
 
 if (userNavBtn && userNavMenu) {
-  openNav(userNavBtn, userNavMenu);
+  toggleShowing(userNavBtn, userNavMenu);
 }

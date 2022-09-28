@@ -16,7 +16,7 @@ const repaintCommentsTotal = () => {
 };
 
 const handleCommentDelete = async (event) => {
-  const commentContainer = event.target.closest(".video__comment");
+  const commentContainer = event.target.closest(".comment");
 
   const {
     dataset: { commentId },
@@ -36,7 +36,7 @@ const handleCommentDelete = async (event) => {
 
 const addFakeComment = (text, commentId, user, isHeroku) => {
   const { _id, name, avatarUrl, socialOnly } = user;
-  const videoContents = document.querySelector(".video__comments");
+  const videoContents = document.querySelector(".comments");
 
   const newComment = document.createElement("li");
   newComment.classList.add("video__comment");

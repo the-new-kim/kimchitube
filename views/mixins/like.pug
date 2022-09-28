@@ -1,12 +1,32 @@
 mixin like(model)
-    if loggedIn && model.meta.likeUsers.includes(loggedInUser._id+"")
-        i.fa-solid.fa-thumbs-up.likeBtn
-    else
-        i.fa-regular.fa-thumbs-up.likeBtn
+    span.likeBtnContainer
+        if loggedIn && model.meta.likeUsers.includes(loggedInUser._id+"")
+            i.fa-solid.fa-thumbs-up.likeBtn
+        else
+            i.fa-regular.fa-thumbs-up.likeBtn
+        
+        if !loggedIn
+            .nonLoggedInLikeMessage
+                if model === video 
+                    span Like this Video? Please 
+                else 
+                    span Like this Comment? Please 
+                a(href="/login") Login 
+                span first.
     span.likeCount=model.meta.likeUsers.length
 
-    if loggedIn && model.meta.dislikeUsers.includes(loggedInUser._id+"")
-        i.fa-solid.fa-thumbs-down.dislikeBtn
-    else
-        i.fa-regular.fa-thumbs-down.dislikeBtn
+    span.likeBtnContainer
+        if loggedIn && model.meta.dislikeUsers.includes(loggedInUser._id+"")
+            i.fa-solid.fa-thumbs-down.dislikeBtn
+        else
+            i.fa-regular.fa-thumbs-down.dislikeBtn
+        
+        if !loggedIn
+            .nonLoggedInLikeMessage
+                if model === video 
+                    span Don't like this Video? Please 
+                else 
+                    span Don't like this Comment? Please 
+                a(href="/login") Login 
+                span first.
     span.dislikeCount=model.meta.dislikeUsers.length

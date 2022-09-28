@@ -13,9 +13,9 @@ const initCommentLike = () => {
 const initVideoLike = () => {
   const videoPlayer = document.getElementById("videoPlayer");
   const videoId = videoPlayer.dataset.id;
-  const videoLikesContainer = document.querySelector(".videoLikesContainer");
+  const videoLikeContainer = document.querySelector(".videoLikeContainer");
 
-  likeContent(videoLikesContainer, "video", videoId);
+  likeContent(videoLikeContainer, "video", videoId);
 };
 
 initCommentLike();

@@ -204,6 +204,10 @@ export const registerView = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
 
+  if (!req.session.user) {
+    return res.sendStatus(200);
+  }
+
   const {
     user: { _id: userId },
   } = req.session;

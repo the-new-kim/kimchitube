@@ -37,13 +37,13 @@ block body
                             li
                                 a(href=`/search?keyword=${tag.replace("#","")}`)=tag
                     p.video__title=video.title
-                    div.video__meta-and-likes
+                    div.video__meta-and-buttons
                         small.video__meta
                             span #{video.meta.views} #{video.meta.views > 1 ? "Views " : "View "}
                             span · 
                             span=new Date(video.createdAt).toLocaleDateString("us-en", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
 
-                        span.video__likes.videoLikesContainer
+                        span.video__like__container.videoLikeContainer
                             +like(video)
                 hr
                 .video__data__bottom
@@ -64,28 +64,28 @@ block body
             
             
             if loggedIn
-                div.video__add-comments
+                div.add-comment
                     div.avatar.avatar__sm
                         +avatar(loggedInUser)
-                    form.video__comment-form#commentForm(data-logged-in-user=loggedInUser.name)
-                        input.video__comment-input(type="text" placeholder="Write a nice commment..." required)
+                    form.add-comment__form#commentForm(data-logged-in-user=loggedInUser.name)
+                        input.add-comment__input(type="text" placeholder="Write a nice commment..." required)
                         button Add Comment
 
-            div.video__comments__container
-                div.video__comments-total
+            div.comments__container
+                div.comments-total
                     span.commentsTotal=video.comments.length
                     span.commentsText #{video.comments.length > 1 ? " Comments" : " Comment"}
-                ul.video__comments#videoComments
+                ul.comments#videoComments
                     each comment in video.comments.reverse()
-                        li.video__comment(data-comment-id=comment._id)
+                        li.comment(data-comment-id=comment._id)
                             div.avatar.avatar__sm
                                     a(href=`/user/${comment.owner._id}`)
                                         +avatar(comment.owner)
-                            div.video__comment__main
+                            div.comment__main
                                 
                                 a(href=`/user/${comment.owner._id}`)=comment.owner.name
                                 p=comment.text
-                                div.video__comment__buttons
+                                div.comment__buttons
                                     +like(comment)
                                     if loggedIn && loggedInUser._id + "" === comment.owner._id + ""
                                         i.deleteButton.fa-solid.fa-trash
@@ -102,3 +102,5 @@ block scripts
     if loggedIn
         script(src="/static/js/commentSection.js") 
         script(src="/static/js/likeSection.js") 
+    else 
+        script(src="/static/js/nonLoggedIn.js") 

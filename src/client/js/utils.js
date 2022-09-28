@@ -1,12 +1,12 @@
-export const openNav = (btn, menu) => {
+export const toggleShowing = (btn, target) => {
   const SHOWING_CL = "showing";
   let isNavOpen = false;
 
   const handleClick = (event) => {
     const btnClicked = btn.contains(event.target);
-    const menuClicked = menu.contains(event.target);
+    const targetClicked = target.contains(event.target);
 
-    if ((!isNavOpen && !btnClicked) || (isNavOpen && menuClicked)) {
+    if ((!isNavOpen && !btnClicked) || (isNavOpen && targetClicked)) {
       return;
     }
     if (isNavOpen && !btnClicked) {
@@ -17,8 +17,8 @@ export const openNav = (btn, menu) => {
     }
 
     isNavOpen
-      ? menu.classList.add(SHOWING_CL)
-      : menu.classList.remove(SHOWING_CL);
+      ? target.classList.add(SHOWING_CL)
+      : target.classList.remove(SHOWING_CL);
   };
 
   document.body.addEventListener("click", handleClick);
