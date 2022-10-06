@@ -1,4 +1,4 @@
-import express, { text } from "express";
+import express from "express";
 import morgan from "morgan";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -9,6 +9,7 @@ import apiRouter from "./routers/apiRouter";
 import { localsMiddleware } from "./middlewares";
 import flash from "express-flash";
 import authRouter from "./routers/authRouter";
+import { connection } from "mongoose";
 
 const app = express();
 const logger = morgan("dev");
@@ -25,7 +26,8 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
+    // store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
+    store: MongoStore.create({ client: connection.client }),
   })
 );
 
