@@ -24,10 +24,14 @@ input:not(input[type="range"], input[type="checkbox"], .add-comment__input) {
   background-color: white;
   margin-bottom: 5px;
   font-size: 16px;
-
+  transition: border-color 300ms ease-out;
   width: 90%;
   &::placeholder {
     color: $color-silver;
+  }
+
+  &:focus {
+    border-color: $color-button-blue;
   }
 }
 
@@ -35,9 +39,10 @@ input[type="submit"] {
   background-color: $color-bone !important;
   text-align: center !important;
   cursor: pointer !important;
-  transition: color 300ms ease-out !important;
+  transition: color 300ms ease-out, border-color 300ms ease-out !important;
   &:hover {
     color: $color-button-blue;
+    border-color: $color-button-blue;
   }
 
   &:disabled {
