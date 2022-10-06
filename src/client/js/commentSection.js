@@ -39,7 +39,7 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   const videoContents = document.querySelector(".comments");
 
   const newComment = document.createElement("li");
-  newComment.classList.add("video__comment");
+  newComment.classList.add("comment");
   newComment.dataset.commentId = commentId;
 
   const avatarContainer = document.createElement("div");
@@ -60,7 +60,7 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   }
 
   const commentMain = document.createElement("div");
-  commentMain.classList.add("video__comment__main");
+  commentMain.classList.add("comment__main");
   const userNameAnchor = document.createElement("a");
   userNameAnchor.hfref = `/user/${_id}`;
   userNameAnchor.innerText = name;
@@ -68,7 +68,7 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   commentText.innerText = text;
 
   const buttonContainer = document.createElement("div");
-  buttonContainer.classList.add("video__comment__buttons");
+  buttonContainer.classList.add("comment__buttons");
   const likeBtn = document.createElement("i");
   likeBtn.classList.add("fa-regular", "fa-thumbs-up", "likeBtn");
   const likeCount = document.createElement("span");
