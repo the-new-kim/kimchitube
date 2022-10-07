@@ -119,8 +119,6 @@ export const postEdit = async (req, res) => {
 
   const hasOldAvatar = avatar.url && !socialOnly ? true : false;
 
-  console.log(avatar);
-
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
@@ -145,8 +143,10 @@ export const postEdit = async (req, res) => {
     if (isHeroku) {
       s3.deleteObject(
         { Bucket: "kimchitube", Key: "images/" + avatar.filename },
-        (err) => {
-          console.log(err);
+        (err, data) => {
+          console.log("S3 DELETE OBJECT👇👇👇👇👇👇👇");
+          console.log("!!!!data:", data);
+          console.log("!!!!err:", err);
         }
       );
     } else {
