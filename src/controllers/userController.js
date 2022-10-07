@@ -128,7 +128,11 @@ export const postEdit = async (req, res) => {
 
       avatar: {
         url: file ? (isHeroku ? file.location : file.path) : avatar.url,
-        filename: file && file.filename,
+        filename: file
+          ? isHeroku
+            ? file.key
+            : file.filename
+          : avatar.filename,
       },
       name,
       email,
