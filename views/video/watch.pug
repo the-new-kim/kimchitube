@@ -7,7 +7,7 @@ block body
     div.video__container
         div.video__main
             div#videoPlayer(data-id=video._id)
-                video(src=isHeroku ? video.fileUrl : "/" + video.fileUrl, crossorigin)
+                video(src=isHeroku ? video.file.url : "/" + video.file.url, crossorigin)
 
                 div#videoControls.videoControls
                     div.videoControls__play

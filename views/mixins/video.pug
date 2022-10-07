@@ -5,7 +5,7 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
     if videoMixinType === videoMixinTypes.index
         a(href=`/video/${video.id}`).video-mixin
             div.video-mixin__thumb
-                img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
+                img(src=isHeroku ? video.thumbnail.url : "/" + video.thumbnail.url, alt=video.title, crossorigin)
    
             div.video-mixin__data
                 .video-mixin__data__left 
@@ -23,7 +23,7 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
     else if videoMixinType === videoMixinTypes.profile
         a(href=`/video/${video.id}`).video-mixin-profile
             div.video-mixin__thumb
-                img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
+                img(src=isHeroku ? video.thumbnail.url : "/" + video.thumbnail.url, alt=video.title, crossorigin)
    
             div.video-mixin__data
                 div.video-mixin__title=video.title
@@ -37,7 +37,7 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
     else if videoMixinType === videoMixinTypes.related
         a(href=`/video/${video.id}`).video-mixin-related
             div.video-mixin__thumb
-                img(src=isHeroku ? video.thumbnailUrl : "/" + video.thumbnailUrl, alt=video.title, crossorigin)
+                img(src=isHeroku ? video.thumbnail.url : "/" + video.thumbnail.url, alt=video.title, crossorigin)
             div.video-mixin__data
                 span.video-mixin__title=video.title
 

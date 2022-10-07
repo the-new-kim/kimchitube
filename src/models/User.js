@@ -1,12 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { fileSchema } from "./File";
 
 const userSchema = new mongoose.Schema({
-  avatarUrl: String,
-  avatar: {
-    url: String,
-    isFromSocial: Boolean,
-  },
+  avatar: fileSchema,
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String },
@@ -27,7 +24,6 @@ const userSchema = new mongoose.Schema({
       ref: "Video",
     },
   ],
-
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,

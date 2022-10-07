@@ -27,7 +27,14 @@ export const localsMiddleware = (req, res, next) => {
   res.locals.loggedIn = Boolean(req.session.loggedIn);
   res.locals.siteTitle = "Kimchi Tube";
   res.locals.loggedInUser = req.session.user;
-  res.locals.isHeroku = isHeroku;
+
+  res.locals.isHeroku = isHeroku; // For frontend side
+  req.session.isHeroku = isHeroku; // For backend side 🧐 ??? Something does not look good
+  // Here I repeat twice to send the value of "isHeroku"...
+  // The reason why I did it.... on Backend Side I don't want get the value from Response.
+  // Because Response is Response not Request...
+  // And I don't want to repeat declaring value <const isHeroku = process.env.NODE_ENV === "production">
+
   res.locals.videoMixinTypes = {
     index: "Index",
     profile: "Profile",

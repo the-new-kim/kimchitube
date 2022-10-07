@@ -35,7 +35,7 @@ const handleCommentDelete = async (event) => {
 };
 
 const addFakeComment = (text, commentId, user, isHeroku) => {
-  const { _id, name, avatarUrl, socialOnly } = user;
+  const { _id, name, avatar, socialOnly } = user;
   const videoContents = document.querySelector(".comments");
 
   const newComment = document.createElement("li");
@@ -47,10 +47,10 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   const avatarAnchor = document.createElement("a");
   avatarAnchor.href = `/user/${_id}`;
   avatarContainer.appendChild(avatarAnchor);
-  if (avatarUrl) {
+  if (avatar.url) {
     const img = document.createElement("img");
     img.crossOrigin = "Anonymous";
-    img.src = isHeroku || socialOnly ? avatarUrl : "/" + avatarUrl;
+    img.src = isHeroku || socialOnly ? avatar.url : "/" + avatar.url;
     avatarAnchor.appendChild(img);
   } else {
     const emptyAvatar = document.createElement("div");

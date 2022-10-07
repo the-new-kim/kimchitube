@@ -1,5 +1,16 @@
 import User from "../models/User";
 import bcrypt from "bcryptjs";
+import fs from "fs";
+import { promisify } from "util";
+import aws from "aws-sdk";
+const s3 = new aws.S3({
+  credentials: {
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET,
+  },
+});
+
+const unlinkAsync = promisify(fs.unlink);
 
 export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "Join" });
@@ -32,6 +43,8 @@ export const postJoin = async (req, res) => {
     name,
     location,
   });
+
+  console.log(user);
 
   req.session.loggedIn = true;
   req.session.user = user;
@@ -97,27 +110,49 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id, avatarUrl },
+      user: { _id, avatar, socialOnly },
       isHeroku,
     },
     body: { name, email, username, location },
     file,
   } = req;
 
-  // const isHeroku = process.env.NODE_ENV === "production";
-  console.log("👉👉👉IS HEROKU ? :", isHeroku);
-  console.log("👉👉👉👉👉AVATAR FILE: ", file);
+  const hasOldAvatar = avatar.url && !socialOnly ? true : false;
+
+  console.log(avatar);
+
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
+      // avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
+
+      avatar: {
+        url: file ? (isHeroku ? file.location : file.path) : avatar.url,
+        filename: file && file.filename,
+      },
       name,
       email,
       username,
       location,
+      socialOnly: false,
     },
-    { new: true }
+
+    { new: true } // 📝 mongoose will not return the updated document in the callback until you pass {new : true } option.
+    //https://stackoverflow.com/questions/57504070/mongoose-findbyidandupdate
   );
+
+  if (hasOldAvatar && file) {
+    if (isHeroku) {
+      s3.deleteObject(
+        { Bucket: "kimchitube/images", key: avatar.filename },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } else {
+      await unlinkAsync(avatar.url);
+    }
+  }
 
   req.session.user = updatedUser;
   req.flash("success", "Saved!");

@@ -79,7 +79,11 @@ export const finishGithubLogin = async (req, res) => {
         password: "",
         location: userData.location,
         socialOnly: true,
-        avatarUrl: userData.avatar_url,
+        // avatarUrl: userData.avatar_url,
+        avatar: {
+          url: userData.avatar_url,
+          filename: "",
+        },
       });
 
       req.session.loggedIn = true;
@@ -151,7 +155,7 @@ export const finishGoogleLogin = async (req, res) => {
     })
   ).json();
 
-  const { email, name, picture: avatarUrl } = userData;
+  const { email, name, picture: url } = userData;
 
   const existingUser = await User.findOne({ email });
 
@@ -167,7 +171,10 @@ export const finishGoogleLogin = async (req, res) => {
       password: "",
       location: "",
       socialOnly: true,
-      avatarUrl,
+      avatar: {
+        url,
+        filename,
+      },
     });
 
     req.session.loggedIn = true;
@@ -241,7 +248,7 @@ export const finishFbLogin = async (req, res) => {
     name,
     email,
     picture: {
-      data: { url: avatarUrl },
+      data: { url },
     },
   } = userData;
 
@@ -263,7 +270,10 @@ export const finishFbLogin = async (req, res) => {
       password: "",
       location: "",
       socialOnly: true,
-      avatarUrl,
+      avatar: {
+        url,
+        filename: "",
+      },
     });
 
     req.session.loggedIn = true;

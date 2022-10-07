@@ -3,8 +3,15 @@ import Video from "../models/Video";
 import Comment from "../models/Comment";
 import fs from "fs";
 import { promisify } from "util";
+import aws from "aws-sdk";
 
 const unlinkAsync = promisify(fs.unlink);
+const s3 = new aws.S3({
+  credentials: {
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET,
+  },
+});
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -154,13 +161,18 @@ export const postUpload = async (req, res) => {
     files: { video, thumbnail },
   } = req;
 
-  console.log("👉👉👉VIDEO FILE: ", video);
-  console.log("THUMBNAIL FILE: ", thumbnail);
-
   try {
     const newVideo = await Video.create({
-      fileUrl: isHeroku ? video[0].location : video[0].path,
-      thumbnailUrl: isHeroku ? thumbnail[0].location : thumbnail[0].path,
+      // fileUrl: isHeroku ? video[0].location : video[0].path,
+      file: {
+        url: isHeroku ? video[0].location : video[0].path,
+        filename: video.filename,
+      },
+      thumbnail: {
+        url: isHeroku ? thumbnail[0].location : thumbnail[0].path,
+        filename: thumbnail.filename,
+      },
+      // thumbnailUrl: isHeroku ? thumbnail[0].location : thumbnail[0].path,
       title,
       description,
       hashtags: Video.formatHashTags(hashtags),
@@ -184,8 +196,11 @@ export const postUpload = async (req, res) => {
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   const {
-    user: { _id },
-  } = req.session;
+    session: {
+      user: { _id },
+      isHeroku,
+    },
+  } = req;
 
   const video = await Video.findById(id);
 
@@ -202,8 +217,20 @@ export const deleteVideo = async (req, res) => {
   user.videos = newVideos;
   user.save();
 
-  await unlinkAsync(video.fileUrl);
-  await unlinkAsync(video.thumbnailUrl);
+  if (isHeroku) {
+    s3.deleteObject(
+      { Bucket: "kimchitube/videos", Key: video.file.filename },
+      (err) => console.log(err)
+    );
+    s3.deleteObject(
+      { Bucket: "kimchitube/images", Key: video.thumbnail.filename },
+      (err) => console.log(err)
+    );
+  } else {
+    await unlinkAsync(video.file.url);
+    await unlinkAsync(video.thumbnail.url);
+  }
+
   await Video.findByIdAndDelete(id);
 
   return res.redirect(`/`);
@@ -266,7 +293,7 @@ export const createComment = async (req, res) => {
     return res.sendStatus(404);
   }
 
-  const { _id, name, avatarUrl, socialOnly } = user;
+  const { _id, name, avatar, socialOnly } = user;
 
   const comment = await Comment.create({
     text,
@@ -283,7 +310,7 @@ export const createComment = async (req, res) => {
 
   return res.status(201).json({
     commentId: comment._id,
-    user: { _id, name, avatarUrl, socialOnly },
+    user: { _id, name, avatar, socialOnly },
     isHeroku,
   });
   // 201: created

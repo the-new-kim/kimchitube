@@ -1,6 +1,6 @@
 mixin avatar(avatarOwner)
-    if avatarOwner.avatarUrl
-        img(src=isHeroku || avatarOwner.socialOnly ? avatarOwner.avatarUrl : "/" + avatarOwner.avatarUrl, crossorigin)
+    if avatarOwner.avatar && avatarOwner.avatar.url
+        img(src=isHeroku || avatarOwner.socialOnly ? avatarOwner.avatar.url : "/" + avatarOwner.avatar.url, crossorigin)
     else
         div.empty__avatar=avatarOwner.name[0]
 
