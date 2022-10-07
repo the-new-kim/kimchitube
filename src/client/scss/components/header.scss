@@ -63,6 +63,9 @@ header {
 
   .header__search {
     justify-content: center;
+    .searchToggler {
+      display: none;
+    }
   }
 
   .header__user-nav {
@@ -118,7 +121,39 @@ nav {
 }
 
 @media (max-width: $screen-sm) {
-  header > *:last-child {
-    flex-basis: 10%;
+  header {
+    padding: 20px;
+    & > *:last-child {
+      flex-basis: 10%;
+    }
+
+    .header__search {
+      justify-content: flex-end;
+
+      .searchToggler {
+        display: block;
+        margin-right: 20px;
+      }
+      form {
+        &.showing {
+          opacity: 1;
+          visibility: visible;
+        }
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: $color-green-cyan;
+        z-index: 2;
+        border: 1px solid $color-smokey-black;
+        i {
+          margin-right: 20px;
+        }
+      }
+    }
   }
 }

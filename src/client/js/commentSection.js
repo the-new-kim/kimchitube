@@ -47,7 +47,7 @@ const addFakeComment = (text, commentId, user, isHeroku) => {
   const avatarAnchor = document.createElement("a");
   avatarAnchor.href = `/user/${_id}`;
   avatarContainer.appendChild(avatarAnchor);
-  if (avatar.url) {
+  if (avatar && avatar.url) {
     const img = document.createElement("img");
     img.crossOrigin = "Anonymous";
     img.src = isHeroku || socialOnly ? avatar.url : "/" + avatar.url;

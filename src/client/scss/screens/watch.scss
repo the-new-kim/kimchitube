@@ -214,6 +214,10 @@
           justify-content: flex-start;
           align-items: center;
 
+          & > i {
+            cursor: pointer;
+          }
+
           & > * {
             margin-right: 10px;
           }

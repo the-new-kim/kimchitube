@@ -6,12 +6,10 @@ block body
     div.avatar
         +avatar(user)
     h3=user.name
-    h4=user.avatar.url
-    div.video-grid
-        each video in user.videos
-            +video(video, videoMixinTypes.profile)
-        else
-            span.empty__message No videos found
 
-
-
+    if(!!user.videos.length)
+        div.video-grid
+            each video in user.videos
+                +video(video,videoMixinTypes.profile)
+    else
+        span.empty__message No video found 

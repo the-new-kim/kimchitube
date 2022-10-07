@@ -161,12 +161,8 @@ export const postUpload = async (req, res) => {
     files: { video, thumbnail },
   } = req;
 
-  console.log("Video Key: ", video[0].key);
-  console.log("Thumbnail Key: ", thumbnail[0].key);
-
   try {
     const newVideo = await Video.create({
-      // fileUrl: isHeroku ? video[0].location : video[0].path,
       file: {
         url: isHeroku ? video[0].location : video[0].path,
         filename: isHeroku ? video[0].key : video[0].filename,
@@ -175,7 +171,6 @@ export const postUpload = async (req, res) => {
         url: isHeroku ? thumbnail[0].location : thumbnail[0].path,
         filename: isHeroku ? thumbnail[0].key : thumbnail[0].filename,
       },
-      // thumbnailUrl: isHeroku ? thumbnail[0].location : thumbnail[0].path,
       title,
       description,
       hashtags: Video.formatHashTags(hashtags),

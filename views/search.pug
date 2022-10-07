@@ -5,13 +5,9 @@ include mixins/video
 block body
     h1=pageTitle
 
-    //- form(method="GET")
-    //-     input(name="keyword" type="text" placeholder="search by keyword" required)
-    //-     input(value="Search" type="submit") 
-    //- hr
-
-    div.video-grid
-        each video in videos 
-            +video(video)
-        else 
-            span.empty__message No videos found
+    if(!!videos.length)
+        div.video-grid
+            each video in videos
+                +video(video)
+    else
+        span.empty__message No video found 
