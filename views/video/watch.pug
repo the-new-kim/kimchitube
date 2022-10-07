@@ -90,11 +90,12 @@ block body
                                     if loggedIn && loggedInUser._id + "" === comment.owner._id + ""
                                         i.deleteButton.fa-solid.fa-trash
 
+        
         ul.related-videos.video-flex-col 
             each video in relatedVideos
                 +video(video, videoMixinTypes.related)
             else
-                span.empty__message No videos found 
+                span.empty__message No related videos found
     
     
 block scripts

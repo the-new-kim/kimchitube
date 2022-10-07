@@ -222,3 +222,18 @@
     }
   }
 }
+
+@media (max-width: $screen-lg) {
+  .video__container {
+    flex-direction: column;
+
+    .video__main {
+      margin-bottom: 20px;
+      border-bottom: solid 1px $color-bone;
+    }
+
+    .related-videos {
+      max-width: 100%;
+    }
+  }
+}

@@ -13,7 +13,6 @@ header {
   .header__logo {
     color: white;
     font-size: 33px;
-    // font-weight: 300;
 
     a {
       display: flex;
@@ -66,7 +65,7 @@ header {
     justify-content: center;
   }
 
-  .header__nav {
+  .header__user-nav {
     justify-content: flex-end;
   }
 }
@@ -75,7 +74,7 @@ nav {
   position: relative;
 }
 
-.nav__menu {
+.user-nav__menu {
   z-index: 100;
   padding: 30px;
   background-color: $color-bone;
@@ -109,5 +108,17 @@ nav {
     &:hover {
       color: $color-button-blue;
     }
+  }
+}
+
+@media (max-width: $screen-md) {
+  .header__logo {
+    font-size: 26px !important;
+  }
+}
+
+@media (max-width: $screen-sm) {
+  header > *:last-child {
+    flex-basis: 10%;
   }
 }

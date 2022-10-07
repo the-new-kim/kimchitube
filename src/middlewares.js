@@ -29,7 +29,7 @@ export const localsMiddleware = (req, res, next) => {
   res.locals.loggedInUser = req.session.user;
   res.locals.isHeroku = isHeroku;
   res.locals.videoMixinTypes = {
-    index: "index",
+    index: "Index",
     profile: "Profile",
     related: "Related",
   };

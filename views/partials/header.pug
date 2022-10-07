@@ -12,11 +12,11 @@ header
             button(type="submit").search__submit
                 i.fa-solid.fa-magnifying-glass
 
-    nav.header__nav
+    nav.header__user-nav
         if loggedIn
             .avatar.avatar__sm.userNavBtn
                 +avatar(loggedInUser)
-            ul.nav__menu.userNavMenu
+            ul.user-nav__menu.userNavMenu
                 li 
                     a(href=`/user/${loggedInUser._id}`) Your Channel
                 li
