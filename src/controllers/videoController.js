@@ -166,11 +166,11 @@ export const postUpload = async (req, res) => {
       // fileUrl: isHeroku ? video[0].location : video[0].path,
       file: {
         url: isHeroku ? video[0].location : video[0].path,
-        filename: video.filename,
+        filename: isHeroku ? video.key : video.filename,
       },
       thumbnail: {
         url: isHeroku ? thumbnail[0].location : thumbnail[0].path,
-        filename: thumbnail.filename,
+        filename: isHeroku ? thumbnail.key : thumbnail.filename,
       },
       // thumbnailUrl: isHeroku ? thumbnail[0].location : thumbnail[0].path,
       title,
@@ -233,6 +233,13 @@ export const deleteVideo = async (req, res) => {
     try {
       await s3.headObject(fileParams).promise();
       console.log("Video File Found in S3");
+
+      try {
+        await s3.deleteObject(fileParams).promise();
+        console.log("video file deleted Successfully");
+      } catch (err) {
+        console.log("ERROR in video file Deleting : " + JSON.stringify(err));
+      }
     } catch (err) {
       console.log("Video File not Found ERROR : " + err.code);
     }
@@ -240,27 +247,17 @@ export const deleteVideo = async (req, res) => {
     try {
       await s3.headObject(thumbnailParams).promise();
       console.log("Thumbnail File Found in S3");
+
+      try {
+        await s3.deleteObject(thumbnailParams).promise();
+        console.log("thumbnail file deleted Successfully");
+      } catch (err) {
+        console.log(
+          "ERROR in thumbnail file Deleting : " + JSON.stringify(err)
+        );
+      }
     } catch (err) {
       console.log("Thumbnail File not Found ERROR : " + err.code);
-    }
-
-    const params = {
-      Bucket: bucket,
-      Delete: {
-        Objects: [
-          {
-            Key: fileParams.Key,
-          },
-          { Key: thumbnailParams.Key },
-        ],
-      },
-    };
-
-    try {
-      await s3.deleteObjects(params).promise();
-      console.log("files deleted Successfully");
-    } catch (err) {
-      console.log("ERROR in files Deleting : " + JSON.stringify(err));
     }
   } else {
     await unlinkAsync(video.file.url);
