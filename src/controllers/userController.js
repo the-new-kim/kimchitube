@@ -117,6 +117,8 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
 
+  console.log(file);
+
   const hasOldAvatar = avatar.url && !socialOnly ? true : false;
 
   const updatedUser = await User.findByIdAndUpdate(
@@ -139,7 +141,6 @@ export const postEdit = async (req, res) => {
     //https://stackoverflow.com/questions/57504070/mongoose-findbyidandupdate
   );
 
-  console.log("hasOldAvatar && file: ", hasOldAvatar && file);
   console.log("isHeroku: ", isHeroku);
 
   if (hasOldAvatar && file) {
