@@ -161,6 +161,9 @@ export const postUpload = async (req, res) => {
     files: { video, thumbnail },
   } = req;
 
+  console.log("Video: ", video);
+  console.log("Thumbnail: ", thumbnail);
+
   try {
     const newVideo = await Video.create({
       // fileUrl: isHeroku ? video[0].location : video[0].path,
