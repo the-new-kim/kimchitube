@@ -144,7 +144,7 @@ export const postEdit = async (req, res) => {
   if (hasOldAvatar && file) {
     if (isHeroku) {
       s3.deleteObject(
-        { Bucket: "kimchitube", key: "images/" + avatar.filename },
+        { Bucket: "kimchitube", Key: "images/" + avatar.filename },
         (err) => {
           console.log(err);
         }
