@@ -139,8 +139,13 @@ export const postEdit = async (req, res) => {
     //https://stackoverflow.com/questions/57504070/mongoose-findbyidandupdate
   );
 
+  console.log("hasOldAvatar && file: ", hasOldAvatar && file);
+  console.log("isHeroku: ", isHeroku);
+
   if (hasOldAvatar && file) {
     if (isHeroku) {
+      console.log("KEY FOR S3: ", "images/" + avatar.filename);
+
       const params = {
         Bucket: "kimchitube",
         Key: "images/" + avatar.filename,
