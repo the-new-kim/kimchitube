@@ -141,14 +141,25 @@ export const postEdit = async (req, res) => {
 
   if (hasOldAvatar && file) {
     if (isHeroku) {
-      s3.deleteObject(
-        { Bucket: "kimchitube", Key: "images/" + avatar.filename },
-        (err, data) => {
-          console.log("S3 DELETE OBJECT👇👇👇👇👇👇👇");
-          console.log("!!!!data:", data);
-          console.log("!!!!err:", err);
+      const params = {
+        Bucket: "kimchitube",
+        Key: "images/" + avatar.filename,
+      };
+
+      try {
+        await s3.headObject(params).promise();
+        console.log("File Found in S3");
+
+        try {
+          await s3.deleteObject(params).promise();
+
+          console.log("file deleted Successfully");
+        } catch (err) {
+          console.log("ERROR in file Deleting : " + JSON.stringify(err));
         }
-      );
+      } catch (err) {
+        console.log("File not Found ERROR : " + err.code);
+      }
     } else {
       await unlinkAsync(avatar.url);
     }

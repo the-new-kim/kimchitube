@@ -218,14 +218,18 @@ export const deleteVideo = async (req, res) => {
   user.save();
 
   if (isHeroku) {
-    s3.deleteObject(
-      { Bucket: "kimchitube", Key: "videos/" + video.file.filename },
-      (err) => console.log(err)
-    );
-    s3.deleteObject(
-      { Bucket: "kimchitube", Key: "images" + video.thumbnail.filename },
-      (err) => console.log(err)
-    );
+    await s3
+      .deleteObject(
+        { Bucket: "kimchitube", Key: "videos/" + video.file.filename },
+        (err) => console.log(err)
+      )
+      .promise();
+    await s3
+      .deleteObject(
+        { Bucket: "kimchitube", Key: "images" + video.thumbnail.filename },
+        (err) => console.log(err)
+      )
+      .promise();
   } else {
     await unlinkAsync(video.file.url);
     await unlinkAsync(video.thumbnail.url);
