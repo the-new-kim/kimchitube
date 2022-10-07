@@ -1,6 +1,10 @@
 import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+import fs from "fs";
+import { promisify } from "util";
+
+const unlinkAsync = promisify(fs.unlink);
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -150,6 +154,9 @@ export const postUpload = async (req, res) => {
     files: { video, thumbnail },
   } = req;
 
+  console.log("👉👉👉VIDEO FILE: ", video);
+  console.log("THUMBNAIL FILE: ", thumbnail);
+
   try {
     const newVideo = await Video.create({
       fileUrl: isHeroku ? video[0].location : video[0].path,
@@ -195,6 +202,8 @@ export const deleteVideo = async (req, res) => {
   user.videos = newVideos;
   user.save();
 
+  await unlinkAsync(video.fileUrl);
+  await unlinkAsync(video.thumbnailUrl);
   await Video.findByIdAndDelete(id);
 
   return res.redirect(`/`);
@@ -392,37 +401,4 @@ export const likeVideo = async (req, res) => {
   }
 
   likeTargetModel(res, video, user, isLikeHit);
-  // /////// capsulate from here
-  // const isAlreadyLiked = video.meta.likeUsers.includes(user._id);
-  // const isAlreadyDisiked = video.meta.dislikeUsers.includes(user._id);
-
-  // if (isLikeHit) {
-  //   if (isAlreadyLiked) {
-  //     removeLikeUser(video, user, "likeUsers");
-  //   } else {
-  //     if (isAlreadyDisiked) {
-  //       removeLikeUser(video, user, "dislikeUsers");
-  //     }
-  //     video.meta.likeUsers.push(user._id);
-  //   }
-  // } else {
-  //   if (isAlreadyDisiked) {
-  //     removeLikeUser(video, user, "dislikeUsers");
-  //   } else {
-  //     if (isAlreadyLiked) {
-  //       removeLikeUser(video, user, "likeUsers");
-  //     }
-
-  //     video.meta.dislikeUsers.push(user._id);
-  //   }
-  // }
-
-  // video.save();
-
-  // return res.status(201).json({
-  //   likes: video.meta.likeUsers.length,
-  //   userLikesTarget: video.meta.likeUsers.includes(user._id),
-  //   dislikes: video.meta.dislikeUsers.length,
-  //   userDislikesTarget: video.meta.dislikeUsers.includes(user._id),
-  // });
 };

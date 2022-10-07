@@ -105,7 +105,7 @@ export const postEdit = async (req, res) => {
   } = req;
 
   // const isHeroku = process.env.NODE_ENV === "production";
-
+  console.log("👉👉👉👉👉AVATAR FILE: ", file);
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
