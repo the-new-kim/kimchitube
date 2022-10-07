@@ -219,11 +219,11 @@ export const deleteVideo = async (req, res) => {
 
   if (isHeroku) {
     s3.deleteObject(
-      { Bucket: "kimchitube/videos", Key: video.file.filename },
+      { Bucket: "kimchitube", Key: "videos/" + video.file.filename },
       (err) => console.log(err)
     );
     s3.deleteObject(
-      { Bucket: "kimchitube/images", Key: video.thumbnail.filename },
+      { Bucket: "kimchitube", Key: "images" + video.thumbnail.filename },
       (err) => console.log(err)
     );
   } else {
