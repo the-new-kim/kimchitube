@@ -117,15 +117,11 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
 
-  console.log(file);
-
   const hasOldAvatar = avatar.url && !socialOnly ? true : false;
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      // avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
-
       avatar: {
         url: file ? (isHeroku ? file.location : file.path) : avatar.url,
         filename: file
@@ -149,8 +145,6 @@ export const postEdit = async (req, res) => {
 
   if (hasOldAvatar && file) {
     if (isHeroku) {
-      console.log("KEY FOR S3: ", "images/" + avatar.filename);
-
       const params = {
         Bucket: "kimchitube",
         Key: "images/" + avatar.filename,
@@ -159,10 +153,8 @@ export const postEdit = async (req, res) => {
       try {
         await s3.headObject(params).promise();
         console.log("File Found in S3");
-
         try {
           await s3.deleteObject(params).promise();
-
           console.log("file deleted Successfully");
         } catch (err) {
           console.log("ERROR in file Deleting : " + JSON.stringify(err));

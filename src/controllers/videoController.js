@@ -218,25 +218,56 @@ export const deleteVideo = async (req, res) => {
   user.save();
 
   if (isHeroku) {
-    await s3
-      .deleteObject(
-        { Bucket: "kimchitube", Key: "videos/" + video.file.filename },
-        (err) => console.log(err)
-      )
-      .promise();
-    await s3
-      .deleteObject(
-        { Bucket: "kimchitube", Key: "images" + video.thumbnail.filename },
-        (err) => console.log(err)
-      )
-      .promise();
+    const bucket = "kimchitube";
+
+    const fileParams = {
+      Bucket: bucket,
+      Key: "videos/" + video.file.filename,
+    };
+
+    const thumbnailParams = {
+      Bucket: bucket,
+      Key: "images/" + video.thumbnail.filename,
+    };
+
+    try {
+      await s3.headObject(fileParams).promise();
+      console.log("Video File Found in S3");
+    } catch (err) {
+      console.log("Video File not Found ERROR : " + err.code);
+    }
+
+    try {
+      await s3.headObject(thumbnailParams).promise();
+      console.log("Thumbnail File Found in S3");
+    } catch (err) {
+      console.log("Thumbnail File not Found ERROR : " + err.code);
+    }
+
+    const params = {
+      Bucket: bucket,
+      Delete: {
+        Objects: [
+          {
+            Key: fileParams.Key,
+          },
+          { Key: thumbnailParams.Key },
+        ],
+      },
+    };
+
+    try {
+      await s3.deleteObjects(params).promise();
+      console.log("files deleted Successfully");
+    } catch (err) {
+      console.log("ERROR in files Deleting : " + JSON.stringify(err));
+    }
   } else {
     await unlinkAsync(video.file.url);
     await unlinkAsync(video.thumbnail.url);
   }
 
   await Video.findByIdAndDelete(id);
-
   return res.redirect(`/`);
 };
 
