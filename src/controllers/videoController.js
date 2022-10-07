@@ -227,7 +227,7 @@ export const deleteVideo = async (req, res) => {
 
     const thumbnailParams = {
       Bucket: bucket,
-      Key: "images/" + video.thumbnail.filename,
+      Key: "videos/" + video.thumbnail.filename,
     };
 
     try {
