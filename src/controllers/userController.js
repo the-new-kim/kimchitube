@@ -117,7 +117,7 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
 
-  const hasOldAvatar = avatar.url && !socialOnly ? true : false;
+  const hasOldAvatar = avatar && avatar.url && !socialOnly ? true : false;
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
