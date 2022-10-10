@@ -16,10 +16,10 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
                     div.video-mixin__meta
                         span #{video.owner.name} • 
                         span #{video.meta.views} 
-                            if video.meta.videws > 1
-                                span views 
+                            if +video.meta.views > 1
+                                span Views 
                             else 
-                                span view
+                                span View
     else if videoMixinType === videoMixinTypes.profile
         a(href=`/video/${video.id}`).video-mixin-profile
             div.video-mixin__thumb
@@ -29,10 +29,10 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
                 div.video-mixin__title=video.title
                 div.video-mixin__meta
                     span #{video.meta.views} 
-                        if video.meta.videws > 1
-                            span views 
+                        if +video.meta.views > 1
+                            span Views 
                         else 
-                            span view
+                            span View
 
     else if videoMixinType === videoMixinTypes.related
         a(href=`/video/${video.id}`).video-mixin-related
@@ -44,9 +44,9 @@ mixin video(video, videoMixinType = videoMixinTypes.index)
                 div.video-mixin__meta
                     span #{video.owner.name} • 
                     span #{video.meta.views} 
-                        if video.meta.videws > 1
-                            span views 
+                        if +video.meta.views > 1
+                            span Views 
                         else 
-                            span view
+                            span View
 
 

@@ -39,7 +39,7 @@ block body
                     p.video__title=video.title
                     div.video__meta-and-buttons
                         small.video__meta
-                            span #{video.meta.views} #{video.meta.views > 1 ? "Views " : "View "}
+                            span #{video.meta.views} #{+video.meta.views > 1 ? "Views " : "View "}
                             span · 
                             span=new Date(video.createdAt).toLocaleDateString("us-en", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
 
