@@ -2,4 +2,4 @@
 
 Youtube clone challenge
 
-### [Live](https://kimchitube.herokuapp.com/)
+### [Live](https://kimchitube1.fly.dev/)
