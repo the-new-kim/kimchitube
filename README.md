@@ -1,15 +1,17 @@
-### Kimchitube
+# Kimchitube
 
 `javascript`
 `express`
+`mongoDB`
+`mongoose`
+`pug`
+`sass`
 `ffmpeg`
 `aws-sdk`
 `bcryptjs`
-`mongoDB`
-`mongoose`
 `multer`
-`pug`
-`sass`
+
+### [Live](https://kimchitube1.fly.dev/)
 
 ## Project Overview:
 
@@ -34,5 +36,3 @@
 ## What’s next?:
 
 - 홈페이지에서 Video들을 동적으로 보여주기 (Trends, Category, Most viewed등)
-
-### [Live](https://kimchitube1.fly.dev/)
