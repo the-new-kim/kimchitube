@@ -18,6 +18,8 @@
 - [English](#en)
 - [한국어](#kr)
 
+- [Gallery](#gallery)
+
 # EN
 
 ## Project Overview:
@@ -44,8 +46,6 @@ Implementing the entire cycle of frontend and backend development, including dep
 
 - Displaying videos dynamically (Trends, Category, Most viewed etc)
 
-## Gallery:
-
 # KR
 
 ## Project Overview:
@@ -71,3 +71,7 @@ Implementing the entire cycle of frontend and backend development, including dep
 ## What’s next?:
 
 - 홈페이지에서 Video들을 동적으로 보여주기 (Trends, Category, Most viewed등)
+
+## Gallery:
+
+![gallery](/gallery/2.gif)
