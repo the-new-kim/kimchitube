@@ -1,5 +1,7 @@
 # Kimchitube
 
+![screen shot](/gallery/1.gif)
+
 `javascript`
 `express`
 `mongoDB`
@@ -12,6 +14,39 @@
 `multer`
 
 ### [Live](https://kimchitube1.fly.dev/)
+
+- [English](#en)
+- [한국어](#kr)
+
+# EN
+
+## Project Overview:
+
+Implementing the entire cycle of frontend and backend development, including deployment, while creating basic functionalities of YouTube
+
+## What I did:
+
+- Designing, building, and deploying a server (using [Fly.io](http://fly.io/))
+- User login and registration with Username & OAuth (Google, Github, Facebook)
+- Video recorder & Thumbnail extractor using FFmpeg
+- Upload Video to AWS S3 using Multer
+- Video player with Javascript: volume control, timeline, fullscreen
+- Displaying related content using hashtags
+- Comment and like features
+
+## Conclusion:
+
+- Using ffmpeg.wasm to convert media files on the client side (in the browser)
+- Deployment using Heroku (formerly) / [Fly.io](http://fly.io/) (currently)
+- Acquiring knowledge and learning how to use HTMLMediaElement
+
+## What’s next?:
+
+- Displaying videos dynamically (Trends, Category, Most viewed etc)
+
+## Gallery:
+
+# KR
 
 ## Project Overview:
 
